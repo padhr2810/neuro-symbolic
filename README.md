@@ -1,5 +1,8 @@
 # neuro-symbolic
 
+You should install the graphviz package in your system (not just the python package). On Ubuntu you should run:
+'sudo apt-get install graphviz'
+
 References:
 
 AlphaProof
