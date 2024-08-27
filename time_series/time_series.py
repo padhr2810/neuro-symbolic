@@ -101,7 +101,7 @@ date_time = pd.to_datetime(df.pop('Date Time'), format='%d.%m.%Y %H:%M:%S')
 # In[ ]:
 
 
-df.head()
+print(f"\ndf.head = {df.head()}\n")
 
 
 # Here is the evolution of a few features over time:
@@ -117,6 +117,9 @@ _ = plot_features.plot(subplots=True)
 plot_features = df[plot_cols][:480]
 plot_features.index = date_time[:480]
 _ = plot_features.plot(subplots=True)
+plt.show()
+plt.clf()
+plt.close() 
 
 
 # ### Inspect and cleanup
@@ -126,7 +129,8 @@ _ = plot_features.plot(subplots=True)
 # In[ ]:
 
 
-df.describe().transpose()
+print(df.describe().transpose()) 
+
 
 
 # #### Wind velocity
@@ -147,7 +151,7 @@ bad_max_wv = max_wv == -9999.0
 max_wv[bad_max_wv] = 0.0
 
 # The above inplace edits are reflected in the DataFrame.
-df['wv (m/s)'].min()
+print(f"Min value of wv (m/s)' = {df['wv (m/s)'].min()}")
 
 
 # ### Feature engineering
@@ -166,6 +170,7 @@ plt.hist2d(df['wd (deg)'], df['wv (m/s)'], bins=(50, 50), vmax=400)
 plt.colorbar()
 plt.xlabel('Wind Direction [deg]')
 plt.ylabel('Wind Velocity [m/s]')
+plt.show()
 
 
 # But this will be easier for the model to interpret if you convert the wind direction and velocity columns to a wind **vector**:
@@ -199,7 +204,9 @@ plt.xlabel('Wind X [m/s]')
 plt.ylabel('Wind Y [m/s]')
 ax = plt.gca()
 ax.axis('tight')
-
+plt.show()
+plt.clf()
+plt.close() 
 
 # #### Time
 
@@ -234,6 +241,10 @@ plt.plot(np.array(df['Day sin'])[:25])
 plt.plot(np.array(df['Day cos'])[:25])
 plt.xlabel('Time [h]')
 plt.title('Time of day signal')
+plt.show()
+plt.clf()
+plt.close() 
+
 
 
 # This gives the model access to the most important frequency features. In this case you knew ahead of time which frequencies were important.
@@ -258,6 +269,9 @@ plt.ylim(0, 400000)
 plt.xlim([0.1, max(plt.xlim())])
 plt.xticks([1, 365.2524], labels=['1/Year', '1/day'])
 _ = plt.xlabel('Frequency (log scale)')
+plt.show()
+plt.clf()
+plt.close()
 
 
 # ### Split the data
@@ -309,6 +323,9 @@ df_std = df_std.melt(var_name='Column', value_name='Normalized')
 plt.figure(figsize=(12, 6))
 ax = sns.violinplot(x='Column', y='Normalized', data=df_std)
 _ = ax.set_xticklabels(df.keys(), rotation=90)
+plt.show()
+plt.clf()
+plt.close()
 
 
 # ## Data windowing
@@ -519,6 +536,9 @@ WindowGenerator.plot = plot
 
 
 w2.plot()
+plt.show()
+plt.clf()
+plt.close()
 
 
 # You can plot the other columns, but the example window `w2` configuration only has labels for the `T (degC)` column.
@@ -527,6 +547,9 @@ w2.plot()
 
 
 w2.plot(plot_col='p (mbar)')
+plt.show()
+plt.clf()
+plt.close()
 
 
 # ### 4. Create `tf.data.Dataset`s
@@ -597,7 +620,7 @@ WindowGenerator.example = example
 
 
 # Each element is an (inputs, label) pair.
-w2.train.element_spec
+print(w2.train.element_spec)
 
 
 # Iterating over a `Dataset` yields concrete batches:
@@ -626,7 +649,8 @@ for example_inputs, example_labels in w2.train.take(1):
 single_step_window = WindowGenerator(
     input_width=1, label_width=1, shift=1,
     label_columns=['T (degC)'])
-single_step_window
+print(f"single_step_window = {single_step_window}")
+
 
 
 # The `window` object creates `tf.data.Dataset`s from the training, validation, and test sets, allowing you to easily iterate over batches of data.
@@ -694,7 +718,7 @@ wide_window = WindowGenerator(
     input_width=24, label_width=24, shift=1,
     label_columns=['T (degC)'])
 
-wide_window
+print(f"wide_window = {wide_window}")
 
 
 # This expanded window can be passed directly to the same `baseline` model without any code changes. This is possible because the inputs and labels have the same number of time steps, and the baseline just forwards the input to the output:
@@ -714,6 +738,7 @@ print('Output shape:', baseline(wide_window.example[0]).shape)
 
 
 wide_window.plot(baseline)
+
 
 
 # In the above plots of three examples the single step model is run over the course of 24 hours. This deserves some explanation:
@@ -795,7 +820,9 @@ print('Output shape:', linear(wide_window.example[0]).shape)
 
 
 wide_window.plot(linear)
-
+plt.show()
+plt.clf()
+plt.close()
 
 # One advantage to linear models is that they're relatively simple to  interpret.
 # You can pull out the layer's weights and visualize the weight assigned to each input:
@@ -808,7 +835,9 @@ plt.bar(x = range(len(train_df.columns)),
 axis = plt.gca()
 axis.set_xticks(range(len(train_df.columns)))
 _ = axis.set_xticklabels(train_df.columns, rotation=90)
-
+plt.show()
+plt.clf()
+plt.close()
 
 # Sometimes the model doesn't even place the most weight on the input `T (degC)`. This is one of the risks of random initialization.
 
@@ -857,7 +886,7 @@ conv_window = WindowGenerator(
     shift=1,
     label_columns=['T (degC)'])
 
-conv_window
+print(f"conv_window = {conv_window}")
 
 
 # In[ ]:
@@ -865,6 +894,9 @@ conv_window
 
 conv_window.plot()
 plt.suptitle("Given 3 hours of inputs, predict 1 hour into the future.")
+plt.show()
+plt.clf()
+plt.close()
 
 
 # You could train a `dense` model on a multiple-input-step window by adding a `tf.keras.layers.Flatten` as the first layer of the model:
@@ -905,6 +937,9 @@ performance['Multi step dense'] = multi_step_dense.evaluate(conv_window.test, ve
 
 
 conv_window.plot(multi_step_dense)
+plt.show()
+plt.clf()
+plt.close()
 
 
 # The main down-side of this approach is that the resulting model can only be executed on input windows of exactly this shape.
@@ -993,7 +1028,8 @@ wide_conv_window = WindowGenerator(
     shift=1,
     label_columns=['T (degC)'])
 
-wide_conv_window
+print(f"wide_conv_window = {wide_conv_window}")
+
 
 
 # In[ ]:
@@ -1011,7 +1047,9 @@ print('Output shape:', conv_model(wide_conv_window.example[0]).shape)
 
 
 wide_conv_window.plot(conv_model)
-
+plt.show()
+plt.clf()
+plt.close()
 
 # ### Recurrent neural network
 # 
@@ -1069,7 +1107,9 @@ performance['LSTM'] = lstm_model.evaluate(wide_window.test, verbose=0, return_di
 
 
 wide_window.plot(lstm_model)
-
+plt.show()
+plt.clf()
+plt.close()
 
 # ### Performance
 
@@ -1079,13 +1119,14 @@ wide_window.plot(lstm_model)
 
 
 cm = lstm_model.metrics[1]
-cm.metrics
+print(f"cm.metrics = {cm.metrics}")
 
 
 # In[ ]:
 
 
-val_performance
+print(f"val_performance = {val_performance}")
+
 
 
 # In[ ]:
@@ -1104,6 +1145,9 @@ plt.xticks(ticks=x, labels=performance.keys(),
            rotation=45)
 _ = plt.legend()
 
+plt.show()
+plt.clf()
+plt.close()
 
 # In[ ]:
 
@@ -1229,7 +1273,7 @@ class ResidualWrapper(tf.keras.Model):
 
 
 #get_ipython().run_cell_magic('time', '', "residual_lstm = ResidualWrapper(\n    tf.keras.Sequential([\n    tf.keras.layers.LSTM(32, return_sequences=True),\n    tf.keras.layers.Dense(\n        num_features,\n        # The predicted deltas should start small.\n        # Therefore, initialize the output layer with zeros.\n        kernel_initializer=tf.initializers.zeros())\n]))\n\nhistory = compile_and_fit(residual_lstm, wide_window)\n\nIPython.display.clear_output()\nval_performance['Residual LSTM'] = residual_lstm.evaluate(wide_window.val, return_dict=True)\nperformance['Residual LSTM'] = residual_lstm.evaluate(wide_window.test, verbose=0, return_dict=True)\nprint()\n")
-
+#ipython
 
 # #### Performance
 
@@ -1251,7 +1295,9 @@ plt.xticks(ticks=x, labels=performance.keys(),
            rotation=45)
 plt.ylabel('MAE (average over all outputs)')
 _ = plt.legend()
-
+plt.show()
+plt.clf()
+plt.close()
 
 # In[ ]:
 
@@ -1291,7 +1337,11 @@ multi_window = WindowGenerator(input_width=24,
                                shift=OUT_STEPS)
 
 multi_window.plot()
-multi_window
+plt.show()
+plt.clf()
+plt.close()
+
+print(f"multi_window = {multi_window}")
 
 
 # ### Baselines
@@ -1317,7 +1367,9 @@ multi_performance = {}
 multi_val_performance['Last'] = last_baseline.evaluate(multi_window.val, return_dict=True)
 multi_performance['Last'] = last_baseline.evaluate(multi_window.test, verbose=0, return_dict=True)
 multi_window.plot(last_baseline)
-
+plt.show()
+plt.clf()
+plt.close()
 
 # Since this task is to predict 24 hours into the future, given 24 hours of the past, another simple approach is to repeat the previous day, assuming tomorrow will be similar:
 # 
@@ -1337,7 +1389,9 @@ repeat_baseline.compile(loss=tf.keras.losses.MeanSquaredError(),
 multi_val_performance['Repeat'] = repeat_baseline.evaluate(multi_window.val, return_dict=True)
 multi_performance['Repeat'] = repeat_baseline.evaluate(multi_window.test, verbose=0, return_dict=True)
 multi_window.plot(repeat_baseline)
-
+plt.show()
+plt.clf()
+plt.close()
 
 # ### Single-shot models
 # 
@@ -1371,7 +1425,9 @@ history = compile_and_fit(multi_linear_model, multi_window)
 multi_val_performance['Linear'] = multi_linear_model.evaluate(multi_window.val, return_dict=True)
 multi_performance['Linear'] = multi_linear_model.evaluate(multi_window.test, verbose=0, return_dict=True)
 multi_window.plot(multi_linear_model)
-
+plt.show()
+plt.clf()
+plt.close()
 
 # #### Dense
 # 
@@ -1399,7 +1455,9 @@ history = compile_and_fit(multi_dense_model, multi_window)
 multi_val_performance['Dense'] = multi_dense_model.evaluate(multi_window.val, return_dict=True)
 multi_performance['Dense'] = multi_dense_model.evaluate(multi_window.test, verbose=0, return_dict=True)
 multi_window.plot(multi_dense_model)
-
+plt.show()
+plt.clf()
+plt.close()
 
 # #### CNN
 
@@ -1430,7 +1488,9 @@ history = compile_and_fit(multi_conv_model, multi_window)
 multi_val_performance['Conv'] = multi_conv_model.evaluate(multi_window.val, return_dict=True)
 multi_performance['Conv'] = multi_conv_model.evaluate(multi_window.test, verbose=0, return_dict=True)
 multi_window.plot(multi_conv_model)
-
+plt.show()
+plt.clf()
+plt.close()
 
 # #### RNN
 
@@ -1462,7 +1522,9 @@ history = compile_and_fit(multi_lstm_model, multi_window)
 multi_val_performance['LSTM'] = multi_lstm_model.evaluate(multi_window.val, return_dict=True)
 multi_performance['LSTM'] = multi_lstm_model.evaluate(multi_window.test, verbose=0, return_dict=True)
 multi_window.plot(multi_lstm_model)
-
+plt.show()
+plt.clf()
+plt.close()
 
 # ### Advanced: Autoregressive model
 # 
@@ -1529,7 +1591,7 @@ FeedBack.warmup = warmup
 
 
 prediction, state = feedback_model.warmup(multi_window.example[0])
-prediction.shape
+print(f"prediction.shape = {prediction.shape}")
 
 
 # With the `RNN`'s state, and an initial prediction you can now continue iterating the model feeding the predictions at each step back as the input.
@@ -1591,7 +1653,9 @@ history = compile_and_fit(feedback_model, multi_window)
 multi_val_performance['AR LSTM'] = feedback_model.evaluate(multi_window.val, return_dict=True)
 multi_performance['AR LSTM'] = feedback_model.evaluate(multi_window.test, verbose=0, return_dict=True)
 multi_window.plot(feedback_model)
-
+plt.show()
+plt.clf()
+plt.close()
 
 # ### Performance
 
@@ -1613,7 +1677,9 @@ plt.xticks(ticks=x, labels=multi_performance.keys(),
            rotation=45)
 plt.ylabel(f'MAE (average over all times and outputs)')
 _ = plt.legend()
-
+plt.show()
+plt.clf()
+plt.close()
 
 # The metrics for the multi-output models in the first half of this tutorial show the performance averaged across all output features. These performances are similar but also averaged across output time steps.
 
@@ -1638,3 +1704,6 @@ for name, value in multi_performance.items():
 # 
 # Also, remember that you can implement any <a href="https://otexts.com/fpp2/index.html" class="external">classical time series model</a> in TensorFlow—this tutorial just focuses on TensorFlow's built-in functionality.
 # 
+
+print("\n#####\nTHE END\n#####\n")
+
