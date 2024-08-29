@@ -45,6 +45,7 @@ import tensorflow as tf
 mpl.rcParams['figure.figsize'] = (8, 6)
 mpl.rcParams['axes.grid'] = False
 
+image_counter = 1
 
 # ## The weather dataset
 # 
@@ -89,8 +90,9 @@ _ = plot_features.plot(subplots=True)
 plot_features = df[plot_cols][:480]
 plot_features.index = date_time[:480]
 _ = plot_features.plot(subplots=True)
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
+
 plt.close() 
 
 
@@ -132,13 +134,15 @@ print(f"Min value of wv (m/s)' = {df['wv (m/s)'].min()}")
 # Right now the distribution of wind data looks like this:
 
 
+plt.close() 
+
 plt.hist2d(df['wd (deg)'], df['wv (m/s)'], bins=(50, 50), vmax=400)
 plt.colorbar()
 plt.xlabel('Wind Direction [deg]')
 plt.ylabel('Wind Velocity [m/s]')
 plt.title("Original wind direction data (before conversion)")
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close() 
 
 # But this will be easier for the model to interpret if you convert the wind direction and velocity columns to a wind **vector**:
@@ -175,10 +179,10 @@ plt.ylabel('Wind Y [m/s]')
 ax = plt.gca()
 ax.axis('tight')
 plt.title("New wind vectors computed")
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close() 
-exit() 
+
 
 
 # #### Time
@@ -214,8 +218,8 @@ plt.plot(np.array(df['Day sin'])[:25])
 plt.plot(np.array(df['Day cos'])[:25])
 plt.xlabel('Time [h]')
 plt.title('Time of day signal')
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close() 
 
 
@@ -242,8 +246,8 @@ plt.ylim(0, 400000)
 plt.xlim([0.1, max(plt.xlim())])
 plt.xticks([1, 365.2524], labels=['1/Year', '1/day'])
 _ = plt.xlabel('Frequency (log scale)')
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 
@@ -296,8 +300,8 @@ df_std = df_std.melt(var_name='Column', value_name='Normalized')
 plt.figure(figsize=(12, 6))
 ax = sns.violinplot(x='Column', y='Normalized', data=df_std)
 _ = ax.set_xticklabels(df.keys(), rotation=90)
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 
@@ -509,8 +513,8 @@ WindowGenerator.plot = plot
 
 
 w2.plot()
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 
@@ -520,8 +524,8 @@ plt.close()
 
 
 w2.plot(plot_col='p (mbar)')
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 
@@ -711,7 +715,9 @@ print('Output shape:', baseline(wide_window.example[0]).shape)
 
 
 wide_window.plot(baseline)
+plt.savefig(f"{image_counter}.png");image_counter+=1;
 
+plt.close()
 
 
 # In the above plots of three examples the single step model is run over the course of 24 hours. This deserves some explanation:
@@ -793,8 +799,8 @@ print('Output shape:', linear(wide_window.example[0]).shape)
 
 
 wide_window.plot(linear)
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 # One advantage to linear models is that they're relatively simple to  interpret.
@@ -808,8 +814,8 @@ plt.bar(x = range(len(train_df.columns)),
 axis = plt.gca()
 axis.set_xticks(range(len(train_df.columns)))
 _ = axis.set_xticklabels(train_df.columns, rotation=90)
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 # Sometimes the model doesn't even place the most weight on the input `T (degC)`. This is one of the risks of random initialization.
@@ -867,8 +873,8 @@ print(f"conv_window = {conv_window}")
 
 conv_window.plot()
 plt.suptitle("Given 3 hours of inputs, predict 1 hour into the future.")
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 
@@ -910,8 +916,8 @@ performance['Multi step dense'] = multi_step_dense.evaluate(conv_window.test, ve
 
 
 conv_window.plot(multi_step_dense)
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 
@@ -1020,8 +1026,8 @@ print('Output shape:', conv_model(wide_conv_window.example[0]).shape)
 
 
 wide_conv_window.plot(conv_model)
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 # ### Recurrent neural network
@@ -1080,8 +1086,8 @@ performance['LSTM'] = lstm_model.evaluate(wide_window.test, verbose=0, return_di
 
 
 wide_window.plot(lstm_model)
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 # ### Performance
@@ -1118,8 +1124,8 @@ plt.xticks(ticks=x, labels=performance.keys(),
            rotation=45)
 _ = plt.legend()
 
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 # In[ ]:
@@ -1268,8 +1274,8 @@ plt.xticks(ticks=x, labels=performance.keys(),
            rotation=45)
 plt.ylabel('MAE (average over all outputs)')
 _ = plt.legend()
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 # In[ ]:
@@ -1310,8 +1316,8 @@ multi_window = WindowGenerator(input_width=24,
                                shift=OUT_STEPS)
 
 multi_window.plot()
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 print(f"multi_window = {multi_window}")
@@ -1340,8 +1346,8 @@ multi_performance = {}
 multi_val_performance['Last'] = last_baseline.evaluate(multi_window.val, return_dict=True)
 multi_performance['Last'] = last_baseline.evaluate(multi_window.test, verbose=0, return_dict=True)
 multi_window.plot(last_baseline)
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 # Since this task is to predict 24 hours into the future, given 24 hours of the past, another simple approach is to repeat the previous day, assuming tomorrow will be similar:
@@ -1362,8 +1368,8 @@ repeat_baseline.compile(loss=tf.keras.losses.MeanSquaredError(),
 multi_val_performance['Repeat'] = repeat_baseline.evaluate(multi_window.val, return_dict=True)
 multi_performance['Repeat'] = repeat_baseline.evaluate(multi_window.test, verbose=0, return_dict=True)
 multi_window.plot(repeat_baseline)
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 # ### Single-shot models
@@ -1398,8 +1404,8 @@ history = compile_and_fit(multi_linear_model, multi_window)
 multi_val_performance['Linear'] = multi_linear_model.evaluate(multi_window.val, return_dict=True)
 multi_performance['Linear'] = multi_linear_model.evaluate(multi_window.test, verbose=0, return_dict=True)
 multi_window.plot(multi_linear_model)
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 # #### Dense
@@ -1428,8 +1434,8 @@ history = compile_and_fit(multi_dense_model, multi_window)
 multi_val_performance['Dense'] = multi_dense_model.evaluate(multi_window.val, return_dict=True)
 multi_performance['Dense'] = multi_dense_model.evaluate(multi_window.test, verbose=0, return_dict=True)
 multi_window.plot(multi_dense_model)
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 # #### CNN
@@ -1461,8 +1467,8 @@ history = compile_and_fit(multi_conv_model, multi_window)
 multi_val_performance['Conv'] = multi_conv_model.evaluate(multi_window.val, return_dict=True)
 multi_performance['Conv'] = multi_conv_model.evaluate(multi_window.test, verbose=0, return_dict=True)
 multi_window.plot(multi_conv_model)
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 # #### RNN
@@ -1495,8 +1501,8 @@ history = compile_and_fit(multi_lstm_model, multi_window)
 multi_val_performance['LSTM'] = multi_lstm_model.evaluate(multi_window.val, return_dict=True)
 multi_performance['LSTM'] = multi_lstm_model.evaluate(multi_window.test, verbose=0, return_dict=True)
 multi_window.plot(multi_lstm_model)
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 # ### Advanced: Autoregressive model
@@ -1626,8 +1632,8 @@ history = compile_and_fit(feedback_model, multi_window)
 multi_val_performance['AR LSTM'] = feedback_model.evaluate(multi_window.val, return_dict=True)
 multi_performance['AR LSTM'] = feedback_model.evaluate(multi_window.test, verbose=0, return_dict=True)
 multi_window.plot(feedback_model)
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 # ### Performance
@@ -1650,8 +1656,8 @@ plt.xticks(ticks=x, labels=multi_performance.keys(),
            rotation=45)
 plt.ylabel(f'MAE (average over all times and outputs)')
 _ = plt.legend()
-plt.show()
-plt.clf()
+plt.savefig(f"{image_counter}.png");image_counter+=1;
+
 plt.close()
 
 # The metrics for the multi-output models in the first half of this tutorial show the performance averaged across all output features. These performances are similar but also averaged across output time steps.
