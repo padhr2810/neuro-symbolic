@@ -1,13 +1,8 @@
+
 #!/usr/bin/env python
 # coding: utf-8
 
 # ##### Copyright 2019 The TensorFlow Authors.
-
-# In[34]:
-
-
-#@title Licensed under the Apache License, Version 2.0 (the "License");
-
 
 
 # # Time series forecasting
@@ -26,14 +21,11 @@
 #   * Single-shot: Make the predictions all at once.
 #   * Autoregressive: Make one prediction at a time and feed the output back to the model.
 
+
 # ## Setup
-
-# In[44]:
-
 
 import os
 import datetime
-
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -53,8 +45,6 @@ image_counter = 1
 # 
 # This dataset contains 14 different features such as air temperature, atmospheric pressure, and humidity. These were collected every 10 minutes, beginning in 2003. For efficiency, you will use only the data collected between 2009 and 2016. This section of the dataset was prepared by François Chollet for his book <a href="https://www.manning.com/books/deep-learning-with-python"
 
-# In[ ]:
-
 
 zip_path = tf.keras.utils.get_file(
     origin='https://storage.googleapis.com/tensorflow/tf-keras-datasets/jena_climate_2009_2016.csv.zip',
@@ -64,8 +54,6 @@ csv_path, _ = os.path.splitext(zip_path)
 
 
 # This tutorial will just deal with **hourly predictions**, so start by sub-sampling the data from 10-minute intervals to one-hour intervals:
-
-# In[ ]:
 
 
 df = pd.read_csv(csv_path)
@@ -145,20 +133,20 @@ plt.savefig(f"{image_counter}.png");image_counter+=1;
 
 plt.close() 
 
+
 # But this will be easier for the model to interpret if you convert the wind direction and velocity columns to a wind **vector**:
+#	i.e. X & Y components.
 
-# In[ ]:
-
-
-wv = df.pop('wv (m/s)')
+wv = df.pop('wv (m/s)')			### returns the entire column "wv (m/s)" -- and removes it from the DataFrame.
 print(f"wv = df.pop('wv (m/s)') = {wv}")
-max_wv = df.pop('max. wv (m/s)')
+max_wv = df.pop('max. wv (m/s)')	### returns another column & deletes from DF.
 print(f"max_wv = {max_wv}")
 
-# Convert to radians.
+# Convert wind angle to radians.
 wd_rad = df.pop('wd (deg)')*np.pi / 180
 
 # Calculate the wind x and y components.
+# i.e. Wind magnitude is the HYpotenuse. cos() gives X proportion (i.e. adj / hyp) and sin() gives Y proportion (i.e. opp / hyp)
 df['Wx'] = wv*np.cos(wd_rad)
 df['Wy'] = wv*np.sin(wd_rad)
 
@@ -168,9 +156,6 @@ df['max Wy'] = max_wv*np.sin(wd_rad)
 
 
 # The distribution of wind vectors is much simpler for the model to correctly interpret:
-
-# In[ ]:
-
 
 plt.hist2d(df['Wx'], df['Wy'], bins=(50, 50), vmax=400)
 plt.colorbar()
@@ -188,31 +173,20 @@ plt.close()
 # #### Time
 
 # Similarly, the `Date Time` column is very useful, but not in this string form. Start by converting it to seconds:
-
-# In[ ]:
-
-
 timestamp_s = date_time.map(pd.Timestamp.timestamp)
 
 
-# Similar to the wind direction, the time in seconds is not a useful model input. Being weather data, it has clear daily and yearly periodicity. There are many ways you could deal with periodicity.
-# 
+# Similar to the wind direction, the time in seconds is not a useful model input. Being weather data, it has clear daily and yearly periodicity. 
+# There are many ways you could deal with periodicity.
 # You can get usable signals by using sine and cosine transforms to clear "Time of day" and "Time of year" signals:
 
-# In[ ]:
-
-
-day = 24*60*60
-year = (365.2425)*day
+day = 24*60*60		# i.e. number of seconds per day
+year = (365.2425)*day	# i.e. number of seconds per year.
 
 df['Day sin'] = np.sin(timestamp_s * (2 * np.pi / day))
 df['Day cos'] = np.cos(timestamp_s * (2 * np.pi / day))
 df['Year sin'] = np.sin(timestamp_s * (2 * np.pi / year))
 df['Year cos'] = np.cos(timestamp_s * (2 * np.pi / year))
-
-
-# In[ ]:
-
 
 plt.plot(np.array(df['Day sin'])[:25])
 plt.plot(np.array(df['Day cos'])[:25])
@@ -227,9 +201,7 @@ plt.close()
 # This gives the model access to the most important frequency features. In this case you knew ahead of time which frequencies were important.
 # 
 # If you don't have that information, you can determine which frequencies are important by extracting features with <a href="https://en.wikipedia.org/wiki/Fast_Fourier_transform" class="external">Fast Fourier Transform</a>. To check the assumptions, here is the `tf.signal.rfft` of the temperature over time. Note the obvious peaks at frequencies near `1/year` and `1/day`:
-# 
-
-# In[ ]:
+#
 
 
 fft = tf.signal.rfft(df['T (degC)'])
@@ -258,7 +230,7 @@ plt.close()
 # 1. It ensures that chopping the data into windows of consecutive samples is still possible.
 # 2. It ensures that the validation/test results are more realistic, being evaluated on the data collected after the model was trained.
 
-# In[ ]:
+
 
 
 column_indices = {name: i for i, name in enumerate(df.columns)}
@@ -279,7 +251,7 @@ num_features = df.shape[1]
 # 
 # It's also arguable that the model shouldn't have access to future values in the training set when training, and that this normalization should be done using moving averages. That's not the focus of this tutorial, and the validation and test sets ensure that you get (somewhat) honest metrics. So, in the interest of simplicity this tutorial uses a simple average.
 
-# In[ ]:
+
 
 
 train_mean = train_df.mean()
@@ -292,7 +264,7 @@ test_df = (test_df - train_mean) / train_std
 
 # Now, peek at the distribution of the features. Some features do have long tails, but there are no obvious errors like the `-9999` wind velocity value.
 
-# In[ ]:
+
 
 
 df_std = (df - train_mean) / train_std
@@ -346,7 +318,7 @@ plt.close()
 # 
 # It also takes the training, evaluation, and test DataFrames as input. These will be converted to `tf.data.Dataset`s of windows later.
 
-# In[ ]:
+
 
 
 class WindowGenerator():
@@ -390,7 +362,7 @@ class WindowGenerator():
 
 # Here is code to create the 2 windows shown in the diagrams at the start of this section:
 
-# In[ ]:
+
 
 
 w1 = WindowGenerator(input_width=24, label_width=1, shift=24,
@@ -398,7 +370,7 @@ w1 = WindowGenerator(input_width=24, label_width=1, shift=24,
 w1
 
 
-# In[ ]:
+
 
 
 w2 = WindowGenerator(input_width=6, label_width=1, shift=1,
@@ -416,7 +388,7 @@ w2
 # 
 # This diagram doesn't show the `features` axis of the data, but this `split_window` function also handles the `label_columns` so it can be used for both the single output and multi-output examples.
 
-# In[ ]:
+
 
 
 def split_window(self, features):
@@ -439,7 +411,7 @@ WindowGenerator.split_window = split_window
 
 # Try it out:
 
-# In[ ]:
+
 
 
 # Stack three slices, the length of the total window.
@@ -463,13 +435,13 @@ print(f'Labels shape: {example_labels.shape}')
 # 
 # Here is a plot method that allows a simple visualization of the split window:
 
-# In[ ]:
+
 
 
 w2.example = example_inputs, example_labels
 
 
-# In[ ]:
+
 
 
 def plot(self, model=None, plot_col='T (degC)', max_subplots=3):
@@ -509,7 +481,7 @@ WindowGenerator.plot = plot
 
 # This plot aligns inputs, labels, and (later) predictions based on the time that the item refers to:
 
-# In[ ]:
+
 
 
 w2.plot()
@@ -520,7 +492,7 @@ plt.close()
 
 # You can plot the other columns, but the example window `w2` configuration only has labels for the `T (degC)` column.
 
-# In[ ]:
+
 
 
 w2.plot(plot_col='p (mbar)')
@@ -533,7 +505,7 @@ plt.close()
 
 # Finally, this `make_dataset` method will take a time series DataFrame and convert it to a `tf.data.Dataset` of `(input_window, label_window)` pairs using the `tf.keras.utils.timeseries_dataset_from_array` function:
 
-# In[ ]:
+
 
 
 def make_dataset(self, data):
@@ -557,7 +529,7 @@ WindowGenerator.make_dataset = make_dataset
 # 
 # Add properties for accessing them as `tf.data.Dataset`s using the `make_dataset` method you defined earlier. Also, add a standard example batch for easy access and plotting:
 
-# In[ ]:
+
 
 
 @property
@@ -593,7 +565,7 @@ WindowGenerator.example = example
 # 
 # The `Dataset.element_spec` property tells you the structure, data types, and shapes of the dataset elements.
 
-# In[ ]:
+
 
 
 # Each element is an (inputs, label) pair.
@@ -602,7 +574,7 @@ print(w2.train.element_spec)
 
 # Iterating over a `Dataset` yields concrete batches:
 
-# In[ ]:
+
 
 
 for example_inputs, example_labels in w2.train.take(1):
@@ -620,7 +592,7 @@ for example_inputs, example_labels in w2.train.take(1):
 # 
 # Configure a `WindowGenerator` object to produce these single-step `(input, label)` pairs:
 
-# In[ ]:
+
 
 
 single_step_window = WindowGenerator(
@@ -633,7 +605,7 @@ print(f"single_step_window = {single_step_window}")
 # The `window` object creates `tf.data.Dataset`s from the training, validation, and test sets, allowing you to easily iterate over batches of data.
 # 
 
-# In[ ]:
+
 
 
 for example_inputs, example_labels in single_step_window.train.take(1):
@@ -651,7 +623,7 @@ for example_inputs, example_labels in single_step_window.train.take(1):
 # 
 # ![Send the input to the output](https://github.com/tensorflow/docs/blob/master/site/en/tutorials/structured_data/images/baseline.png?raw=1)
 
-# In[ ]:
+
 
 
 class Baseline(tf.keras.Model):
@@ -668,7 +640,7 @@ class Baseline(tf.keras.Model):
 
 # Instantiate and evaluate this model:
 
-# In[ ]:
+
 
 
 baseline = Baseline(label_index=column_indices['T (degC)'])
@@ -688,7 +660,7 @@ performance['Baseline'] = baseline.evaluate(single_step_window.test, verbose=0, 
 # 
 # So, create a wider `WindowGenerator` that generates windows 24 hours of consecutive inputs and labels at a time. The new `wide_window` variable doesn't change the way the model operates. The model still makes predictions one hour into the future based on a single input time step. Here, the `time` axis acts like the `batch` axis: each prediction is made independently with no interaction between time steps:
 
-# In[ ]:
+
 
 
 wide_window = WindowGenerator(
@@ -702,7 +674,7 @@ print(f"wide_window = {wide_window}")
 # 
 # ![One prediction 1h into the future, ever hour.](https://github.com/tensorflow/docs/blob/master/site/en/tutorials/structured_data/images/last_window.png?raw=1)
 
-# In[ ]:
+
 
 
 print('Input shape:', wide_window.example[0].shape)
@@ -711,7 +683,7 @@ print('Output shape:', baseline(wide_window.example[0]).shape)
 
 # By plotting the baseline model's predictions, notice that it is simply the labels shifted right by one hour:
 
-# In[ ]:
+
 
 
 wide_window.plot(baseline)
@@ -734,7 +706,7 @@ plt.close()
 # 
 # A `tf.keras.layers.Dense` layer with no `activation` set is a linear model. The layer only transforms the last axis of the data from `(batch, time, inputs)` to `(batch, time, units)`; it is applied independently to every item across the `batch` and `time` axes.
 
-# In[ ]:
+
 
 
 linear = tf.keras.Sequential([
@@ -742,7 +714,7 @@ linear = tf.keras.Sequential([
 ])
 
 
-# In[ ]:
+
 
 
 print('Input shape:', single_step_window.example[0].shape)
@@ -751,7 +723,7 @@ print('Output shape:', linear(single_step_window.example[0]).shape)
 
 # This tutorial trains many models, so package the training procedure into a function:
 
-# In[ ]:
+
 
 
 MAX_EPOCHS = 20
@@ -773,7 +745,7 @@ def compile_and_fit(model, window, patience=2):
 
 # Train the model and evaluate its performance:
 
-# In[ ]:
+
 
 
 history = compile_and_fit(linear, single_step_window)
@@ -786,7 +758,7 @@ performance['Linear'] = linear.evaluate(single_step_window.test, verbose=0, retu
 # 
 # ![A single step prediction](https://github.com/tensorflow/docs/blob/master/site/en/tutorials/structured_data/images/wide_window.png?raw=1)
 
-# In[ ]:
+
 
 
 print('Input shape:', wide_window.example[0].shape)
@@ -795,7 +767,7 @@ print('Output shape:', linear(wide_window.example[0]).shape)
 
 # Here is the plot of its example predictions on the `wide_window`, note how in many cases the prediction is clearly better than just returning the input temperature, but in a few cases it's worse:
 
-# In[ ]:
+
 
 
 wide_window.plot(linear)
@@ -806,7 +778,7 @@ plt.close()
 # One advantage to linear models is that they're relatively simple to  interpret.
 # You can pull out the layer's weights and visualize the weight assigned to each input:
 
-# In[ ]:
+
 
 
 plt.bar(x = range(len(train_df.columns)),
@@ -826,7 +798,7 @@ plt.close()
 # 
 # Here's a model similar to the `linear` model, except it stacks several a few `Dense` layers between the input and the output:
 
-# In[ ]:
+
 
 
 dense = tf.keras.Sequential([
@@ -855,7 +827,7 @@ performance['Dense'] = dense.evaluate(single_step_window.test, verbose=0, return
 # Note that the `Window`'s `shift` parameter is relative to the end of the two windows.
 # 
 
-# In[ ]:
+
 
 
 CONV_WIDTH = 3
@@ -868,7 +840,7 @@ conv_window = WindowGenerator(
 print(f"conv_window = {conv_window}")
 
 
-# In[ ]:
+
 
 
 conv_window.plot()
@@ -880,7 +852,7 @@ plt.close()
 
 # You could train a `dense` model on a multiple-input-step window by adding a `tf.keras.layers.Flatten` as the first layer of the model:
 
-# In[ ]:
+
 
 
 multi_step_dense = tf.keras.Sequential([
@@ -895,14 +867,14 @@ multi_step_dense = tf.keras.Sequential([
 ])
 
 
-# In[ ]:
+
 
 
 print('Input shape:', conv_window.example[0].shape)
 print('Output shape:', multi_step_dense(conv_window.example[0]).shape)
 
 
-# In[ ]:
+
 
 
 history = compile_and_fit(multi_step_dense, conv_window)
@@ -912,7 +884,7 @@ val_performance['Multi step dense'] = multi_step_dense.evaluate(conv_window.val,
 performance['Multi step dense'] = multi_step_dense.evaluate(conv_window.test, verbose=0, return_dict=True)
 
 
-# In[ ]:
+
 
 
 conv_window.plot(multi_step_dense)
@@ -923,7 +895,7 @@ plt.close()
 
 # The main down-side of this approach is that the resulting model can only be executed on input windows of exactly this shape.
 
-# In[ ]:
+
 
 
 print('Input shape:', wide_window.example[0].shape)
@@ -945,7 +917,7 @@ except Exception as e:
 # * The `tf.keras.layers.Flatten` and the first `tf.keras.layers.Dense` are replaced by a `tf.keras.layers.Conv1D`.
 # * The `tf.keras.layers.Reshape` is no longer necessary since the convolution keeps the time axis in its output.
 
-# In[ ]:
+
 
 
 conv_model = tf.keras.Sequential([
@@ -959,7 +931,7 @@ conv_model = tf.keras.Sequential([
 
 # Run it on an example batch to check that the model produces outputs with the expected shape:
 
-# In[ ]:
+
 
 
 print("Conv model on `conv_window`")
@@ -969,7 +941,7 @@ print('Output shape:', conv_model(conv_window.example[0]).shape)
 
 # Train and evaluate it on the ` conv_window` and it should give performance similar to the `multi_step_dense` model.
 
-# In[ ]:
+
 
 
 history = compile_and_fit(conv_model, conv_window)
@@ -985,7 +957,7 @@ performance['Conv'] = conv_model.evaluate(conv_window.test, verbose=0, return_di
 # 
 # If you run it on wider input, it produces wider output:
 
-# In[ ]:
+
 
 
 print("Wide window")
@@ -996,7 +968,7 @@ print('Output shape:', conv_model(wide_window.example[0]).shape)
 
 # Note that the output is shorter than the input. To make training or plotting work, you need the labels, and prediction to have the same length. So build a `WindowGenerator` to produce wide windows with a few extra input time steps so the label and prediction lengths match:
 
-# In[ ]:
+
 
 
 LABEL_WIDTH = 24
@@ -1011,7 +983,7 @@ print(f"wide_conv_window = {wide_conv_window}")
 
 
 
-# In[ ]:
+
 
 
 print("Wide conv window")
@@ -1022,7 +994,7 @@ print('Output shape:', conv_model(wide_conv_window.example[0]).shape)
 
 # Now, you can plot the model's predictions on a wider window. Note the 3 input time steps before the first prediction. Every prediction here is based on the 3 preceding time steps:
 
-# In[ ]:
+
 
 
 wide_conv_window.plot(conv_model)
@@ -1050,7 +1022,7 @@ plt.close()
 # 
 # ![An LSTM making a prediction after every time step](https://github.com/tensorflow/docs/blob/master/site/en/tutorials/structured_data/images/lstm_many_window.png?raw=1)
 
-# In[ ]:
+
 
 
 lstm_model = tf.keras.models.Sequential([
@@ -1065,14 +1037,14 @@ lstm_model = tf.keras.models.Sequential([
 # 
 # Note: This will give a pessimistic view of the model's performance. On the first time step, the model has no access to previous steps and, therefore, can't do any better than the simple `linear` and `dense` models shown earlier.
 
-# In[ ]:
+
 
 
 print('Input shape:', wide_window.example[0].shape)
 print('Output shape:', lstm_model(wide_window.example[0]).shape)
 
 
-# In[ ]:
+
 
 
 history = compile_and_fit(lstm_model, wide_window)
@@ -1082,7 +1054,7 @@ val_performance['LSTM'] = lstm_model.evaluate(wide_window.val, return_dict=True)
 performance['LSTM'] = lstm_model.evaluate(wide_window.test, verbose=0, return_dict=True)
 
 
-# In[ ]:
+
 
 
 wide_window.plot(lstm_model)
@@ -1094,21 +1066,21 @@ plt.close()
 
 # With this dataset typically each of the models does slightly better than the one before it:
 
-# In[ ]:
+
 
 
 cm = lstm_model.metrics[1]
 print(f"cm.metrics = {cm.metrics}")
 
 
-# In[ ]:
+
 
 
 print(f"val_performance = {val_performance}")
 
 
 
-# In[ ]:
+
 
 
 x = np.arange(len(performance))
@@ -1128,7 +1100,7 @@ plt.savefig(f"{image_counter}.png");image_counter+=1;
 
 plt.close()
 
-# In[ ]:
+
 
 
 for name, value in performance.items():
@@ -1141,7 +1113,7 @@ for name, value in performance.items():
 # 
 # All of these models can be converted to predict multiple features just by changing the number of units in the output layer and adjusting the training windows to include all features in the `labels` (`example_labels`):
 
-# In[ ]:
+
 
 
 single_step_window = WindowGenerator(
@@ -1163,7 +1135,7 @@ for example_inputs, example_labels in wide_window.train.take(1):
 # 
 # The same baseline model (`Baseline`) can be used here, but this time repeating all features instead of selecting a specific `label_index`:
 
-# In[ ]:
+
 
 
 baseline = Baseline()
@@ -1171,7 +1143,7 @@ baseline.compile(loss=tf.keras.losses.MeanSquaredError(),
                  metrics=[tf.keras.metrics.MeanAbsoluteError()])
 
 
-# In[ ]:
+
 
 
 val_performance = {}
@@ -1182,7 +1154,7 @@ performance['Baseline'] = baseline.evaluate(wide_window.test, verbose=0, return_
 
 # #### Dense
 
-# In[ ]:
+
 
 
 dense = tf.keras.Sequential([
@@ -1192,7 +1164,7 @@ dense = tf.keras.Sequential([
 ])
 
 
-# In[ ]:
+
 
 
 history = compile_and_fit(dense, single_step_window)
@@ -1205,7 +1177,7 @@ performance['Dense'] = dense.evaluate(single_step_window.test, verbose=0, return
 # #### RNN
 # 
 
-# In[ ]:
+
 
 
 #get_ipython().run_cell_magic('time', '', "wide_window = WindowGenerator(\n    input_width=24, label_width=24, shift=1)\n\nlstm_model = tf.keras.models.Sequential([\n    # Shape [batch, time, features] => [batch, time, lstm_units]\n    tf.keras.layers.LSTM(32, return_sequences=True),\n    # Shape => [batch, time, features]\n    tf.keras.layers.Dense(units=num_features)\n])\n\nhistory = compile_and_fit(lstm_model, wide_window)\n\nIPython.display.clear_output()\nval_performance['LSTM'] = lstm_model.evaluate( wide_window.val, return_dict=True)\nperformance['LSTM'] = lstm_model.evaluate( wide_window.test, verbose=0, return_dict=True)\n\nprint()\n")
@@ -1231,7 +1203,7 @@ performance['Dense'] = dense.evaluate(single_step_window.test, verbose=0, return
 # 
 # Here, it is being applied to the LSTM model, note the use of the `tf.initializers.zeros` to ensure that the initial predicted changes are small, and don't overpower the residual connection. There are no symmetry-breaking concerns for the gradients here, since the `zeros` are only used on the last layer.
 
-# In[ ]:
+
 
 
 class ResidualWrapper(tf.keras.Model):
@@ -1248,7 +1220,7 @@ class ResidualWrapper(tf.keras.Model):
     return inputs + delta
 
 
-# In[ ]:
+
 
 
 #get_ipython().run_cell_magic('time', '', "residual_lstm = ResidualWrapper(\n    tf.keras.Sequential([\n    tf.keras.layers.LSTM(32, return_sequences=True),\n    tf.keras.layers.Dense(\n        num_features,\n        # The predicted deltas should start small.\n        # Therefore, initialize the output layer with zeros.\n        kernel_initializer=tf.initializers.zeros())\n]))\n\nhistory = compile_and_fit(residual_lstm, wide_window)\n\nIPython.display.clear_output()\nval_performance['Residual LSTM'] = residual_lstm.evaluate(wide_window.val, return_dict=True)\nperformance['Residual LSTM'] = residual_lstm.evaluate(wide_window.test, verbose=0, return_dict=True)\nprint()\n")
@@ -1258,7 +1230,7 @@ class ResidualWrapper(tf.keras.Model):
 
 # Here is the overall performance for these multi-output models.
 
-# In[ ]:
+
 
 
 x = np.arange(len(performance))
@@ -1278,7 +1250,7 @@ plt.savefig(f"{image_counter}.png");image_counter+=1;
 
 plt.close()
 
-# In[ ]:
+
 
 
 for name, value in performance.items():
@@ -1307,7 +1279,7 @@ for name, value in performance.items():
 # 
 # Here is a `Window` object that generates these slices from the dataset:
 
-# In[ ]:
+
 
 
 OUT_STEPS = 24
@@ -1329,7 +1301,7 @@ print(f"multi_window = {multi_window}")
 # 
 # ![Repeat the last input, for each output step](https://github.com/tensorflow/docs/blob/master/site/en/tutorials/structured_data/images/multistep_last.png?raw=1)
 
-# In[ ]:
+
 
 
 class MultiStepLastBaseline(tf.keras.Model):
@@ -1354,7 +1326,7 @@ plt.close()
 # 
 # ![Repeat the previous day](https://github.com/tensorflow/docs/blob/master/site/en/tutorials/structured_data/images/multistep_repeat.png?raw=1)
 
-# In[ ]:
+
 
 
 class RepeatBaseline(tf.keras.Model):
@@ -1384,7 +1356,7 @@ plt.close()
 # 
 # ![Predict all timesteps from the last time-step](https://github.com/tensorflow/docs/blob/master/site/en/tutorials/structured_data/images/multistep_dense.png?raw=1)
 
-# In[ ]:
+
 
 
 multi_linear_model = tf.keras.Sequential([
@@ -1412,7 +1384,7 @@ plt.close()
 # 
 # Adding a `tf.keras.layers.Dense` between the input and output gives the linear model more power, but is still only based on a single input time step.
 
-# In[ ]:
+
 
 
 multi_dense_model = tf.keras.Sequential([
@@ -1444,7 +1416,7 @@ plt.close()
 # 
 # ![A convolutional model sees how things change over time](https://github.com/tensorflow/docs/blob/master/site/en/tutorials/structured_data/images/multistep_conv.png?raw=1)
 
-# In[ ]:
+
 
 
 CONV_WIDTH = 3
@@ -1480,7 +1452,7 @@ plt.close()
 # ![The LSTM accumulates state over the input window, and makes a single prediction for the next 24 hours](https://github.com/tensorflow/docs/blob/master/site/en/tutorials/structured_data/images/multistep_lstm.png?raw=1)
 # 
 
-# In[ ]:
+
 
 
 multi_lstm_model = tf.keras.Sequential([
@@ -1527,7 +1499,7 @@ plt.close()
 # 
 # In this case, the model has to manually manage the inputs for each step, so it uses `tf.keras.layers.LSTMCell` directly for the lower level, single time step interface.
 
-# In[ ]:
+
 
 
 class FeedBack(tf.keras.Model):
@@ -1541,7 +1513,7 @@ class FeedBack(tf.keras.Model):
     self.dense = tf.keras.layers.Dense(num_features)
 
 
-# In[ ]:
+
 
 
 feedback_model = FeedBack(units=32, out_steps=OUT_STEPS)
@@ -1549,7 +1521,7 @@ feedback_model = FeedBack(units=32, out_steps=OUT_STEPS)
 
 # The first method this model needs is a `warmup` method to initialize its internal state based on the inputs. Once trained, this state will capture the relevant parts of the input history. This is equivalent to the single-step `LSTM` model from earlier:
 
-# In[ ]:
+
 
 
 def warmup(self, inputs):
@@ -1566,7 +1538,7 @@ FeedBack.warmup = warmup
 
 # This method returns a single time-step prediction and the internal state of the `LSTM`:
 
-# In[ ]:
+
 
 
 prediction, state = feedback_model.warmup(multi_window.example[0])
@@ -1579,7 +1551,7 @@ print(f"prediction.shape = {prediction.shape}")
 
 # Note: Stacking a Python list like this only works with eager-execution, using `Model.compile(..., run_eagerly=True)` for training, or with a fixed length output. For a dynamic output length, you would need to use a `tf.TensorArray` instead of a Python list, and `tf.range` instead of the Python `range`.
 
-# In[ ]:
+
 
 
 def call(self, inputs, training=None):
@@ -1614,7 +1586,7 @@ FeedBack.call = call
 
 # Test run this model on the example inputs:
 
-# In[ ]:
+
 
 
 print('Output shape (batch, time, features): ', feedback_model(multi_window.example[0]).shape)
@@ -1622,7 +1594,7 @@ print('Output shape (batch, time, features): ', feedback_model(multi_window.exam
 
 # Now, train the model:
 
-# In[ ]:
+
 
 
 history = compile_and_fit(feedback_model, multi_window)
@@ -1640,7 +1612,7 @@ plt.close()
 
 # There are clearly diminishing returns as a function of model complexity on this problem:
 
-# In[ ]:
+
 
 
 x = np.arange(len(multi_performance))
@@ -1662,7 +1634,7 @@ plt.close()
 
 # The metrics for the multi-output models in the first half of this tutorial show the performance averaged across all output features. These performances are similar but also averaged across output time steps.
 
-# In[ ]:
+
 
 
 for name, value in multi_performance.items():
