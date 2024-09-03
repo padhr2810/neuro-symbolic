@@ -1,0 +1,14 @@
+https://github.com/CaptainE/RNN-LSTM-in-numpy
+
+Quote:
+"""
+Originally developed by me (Peter Christensen), Nicklas Hansen, and Alexander Johansen as educational material for the graduate deep learning course at the Technical University of Denmark (DTU).
+To really get a grasp of what is going on inside the recurrent neural networks that we are about to teach you, we will carry out a substantial part of this exercise in NumPy rather than PyTorch. Once you get a hold of it, we will proceed to the PyTorch implementation.
+
+In this notebook we will show you:
+
+    How to represent categorical variables in networks
+    How to build a recurrent neural network (RNN) from scratch
+    How to build a LSTM network from scratch
+    How to build a LSTM network in PyTorch
+"""
