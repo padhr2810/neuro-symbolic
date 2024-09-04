@@ -60,3 +60,6 @@ alias
 
 # To remove an alias:
 unalias [name] 	# e.g. `unalias m`
+
+# How to run a shell script from bash:
+bash myscript.sh 
