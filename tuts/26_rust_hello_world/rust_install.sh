@@ -13,3 +13,6 @@ sudo apt-get install curl
 
 
 rustc --version
+
+
+# https://doc.rust-lang.org/rust-by-example/hello.html
