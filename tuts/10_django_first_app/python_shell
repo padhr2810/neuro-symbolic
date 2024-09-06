@@ -6,3 +6,5 @@ Post.Status.choices
 Post.Status.labels
 Post.Status.values
 Post.Status.names
+
+# django shell similar to python shell except it reads settings.py already and preloads stuff
