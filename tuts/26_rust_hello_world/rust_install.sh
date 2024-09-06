@@ -14,5 +14,6 @@ sudo apt-get install curl
 
 rustc --version
 
-
+# 2 EXAMPLES:
 # https://doc.rust-lang.org/rust-by-example/hello.html
+# https://www.youtube.com/watch?v=-iER2NwD8OU
