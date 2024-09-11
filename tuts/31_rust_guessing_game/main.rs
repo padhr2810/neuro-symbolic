@@ -10,6 +10,12 @@ use std::io;
 // Remember that a crate is a collection of Rust source code files. The project we’ve been building is a binary crate, which is an executable. 
 // The rand crate is a library crate, which contains code that is intended to be used in other programs and can’t be executed on its own.
 
+// In TOML the specifier 0.8.5 is actually shorthand for ^0.8.5, which means any version that is at least 0.8.5 but below 0.9.0.
+// Cargo considers these versions to have public APIs compatible with version 0.8.5, and this specification ensures you’ll get the latest patch release that will still compile with our code 
+// Any version 0.9.0 or greater is not guaranteed to have the same API as what the following examples use.
+// Crates.io is where people in the Rust ecosystem post their open source Rust projects for others to use
+// Ensuring reproducibility -- project remains at 0.8.5 until you explicitly upgrade, thanks to the Cargo.lock file
+
 fn main() {
     println!("Guess the number!");
 
