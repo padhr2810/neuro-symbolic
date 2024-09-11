@@ -20,7 +20,9 @@ fn main() {
     println!("Guess the number!");
 
     let secret_number = rand::thread_rng().gen_range(1..=100);
-
+            // thread_rng() = rng that is local to the current thread of execution and is seeded by the operating system
+            // gen_range = generate a number within the specified range.
+    
     loop {
         println!("Please input your guess.");
 
