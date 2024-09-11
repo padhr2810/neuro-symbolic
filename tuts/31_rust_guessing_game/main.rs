@@ -24,7 +24,8 @@ fn main() {
             // gen_range = generate a number within the specified range.
             // Unless otherwise specified, Rust defaults to an i32, which is the type of secret_number 
     
-    loop {
+    loop {        // loop to allow multiple guesses.
+        
         println!("Please input your guess.");
 
         let mut guess = String::new();  // let mut = create a mutable var
@@ -43,9 +44,9 @@ fn main() {
                                                 // The Err variant means the operation failed, and Err contains information about how or why the operation failed.
                                             // If you don’t call expect, the program will compile, but you’ll get a warning:
         
-        let guess: u32 = match guess.trim().parse() {
-            Ok(num) => num,
-            Err(_) => continue,
+        let guess: u32 = match guess.trim().parse() {        // use "match" instead of "expect" coz don't want it to crash.
+            Ok(num) => num,        // "OK" implies it ran successfully
+            Err(_) => continue,    // Error: don't crash, want to continue.... underscore is CATCHALL value i.e. all Err values.
         };
 
         // We create a variable named guess. But wait, doesn’t the program already have a variable named guess? 
@@ -53,6 +54,10 @@ fn main() {
         // Shadowing lets us reuse the guess variable name rather than forcing us to create two unique variables
         // this feature is often used when you want to convert a value from one type to another type.
         // i.e. convert from string type to "u32"
+        // The trim method on a String instance will eliminate any whitespace at beginning and end, because u32 can only contain numerical data. 
+        // The trim method eliminates \n or \r\n (when hit ENTER in linux or windows respectively)
+        // The parse method on strings converts a string to another type
+        // the comparison with secret_number means Rust will infer that secret_number should be a u32 as well.
 
         println!("You guessed: {guess}");
 
@@ -61,7 +66,7 @@ fn main() {
             Ordering::Greater => println!("Too big!"),
             Ordering::Equal => {
                 println!("You win!");
-                break;
+                break;                // "break" makes it exit the loop.i.e. exit program coz it's last part of main()
 
                 // A match expression is made up of arms. An arm consists of a pattern to match against, and the code to run if it matches.
             }
