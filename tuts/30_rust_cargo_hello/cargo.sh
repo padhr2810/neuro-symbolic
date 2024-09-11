@@ -1,12 +1,15 @@
 
-# With simple projects, Cargo doesn’t provide a lot of value over just using rustc, but it will prove its worth as your programs become more intricate. Once programs grow to multiple files or need a dependency, it’s much easier to let Cargo coordinate the build.
-# Cargo is Rust’s build system and package manager. Most Rustaceans use this tool to manage their Rust projects because Cargo handles a lot of tasks for you, such as building your code, downloading the libraries your code depends on, and building those libraries. 
+# With simple projects, Cargo doesn’t provide a lot of value over just using rustc, but it will prove its worth as your programs become more intricate. 
+# Once programs grow to multiple files or need a dependency, it’s much easier to let Cargo coordinate the build.
+# Cargo is Rust’s build system and package manager. Most Rustaceans use this tool to manage their Rust projects because Cargo handles a lot of tasks for you, 
+# such as building your code, downloading the libraries your code depends on, and building those libraries. 
 
 cargo --version
 
 cargo new hello_cargo
 cd hello_cargo
 ls
+
 # see that Cargo has generated two files and one directory for us: a Cargo.toml file and a src directory with a main.rs file inside
 # It has also initialized a new Git repository along with a .gitignore file
 # TOML is Cargo’s configuration format.
