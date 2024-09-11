@@ -48,3 +48,6 @@ cargo update
 # git clone example.org/someproject
 # cd someproject
 # cargo build
+
+cargo doc --open
+# builds docs of all your dependencies locally and opens in browser. Can then click "rand" in sidebar on the left.
