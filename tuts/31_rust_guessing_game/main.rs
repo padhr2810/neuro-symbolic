@@ -1,6 +1,6 @@
 
 use rand::Rng;        // dependency was specified in TOML
-use std::cmp::Ordering;    
+use std::cmp::Ordering;    // The Ordering type is another enum and has the variants Less, Greater, and Equal
 use std::io;
 
 // By default, Rust has a set of items defined in the standard library that it brings into the scope of every program. This set is called the prelude, see docs.
@@ -22,6 +22,7 @@ fn main() {
     let secret_number = rand::thread_rng().gen_range(1..=100);
             // thread_rng() = rng that is local to the current thread of execution and is seeded by the operating system
             // gen_range = generate a number within the specified range.
+            // Unless otherwise specified, Rust defaults to an i32, which is the type of secret_number 
     
     loop {
         println!("Please input your guess.");
@@ -47,14 +48,22 @@ fn main() {
             Err(_) => continue,
         };
 
+        // We create a variable named guess. But wait, doesn’t the program already have a variable named guess? 
+        // It does, but helpfully Rust allows us to shadow the previous value of guess with a new one. 
+        // Shadowing lets us reuse the guess variable name rather than forcing us to create two unique variables
+        // this feature is often used when you want to convert a value from one type to another type.
+        // i.e. convert from string type to "u32"
+
         println!("You guessed: {guess}");
 
-        match guess.cmp(&secret_number) {
+        match guess.cmp(&secret_number) {                // "cmp" = compare
             Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
             Ordering::Equal => {
                 println!("You win!");
                 break;
+
+                // A match expression is made up of arms. An arm consists of a pattern to match against, and the code to run if it matches.
             }
         }
     }
