@@ -38,6 +38,12 @@ cargo build --release
 # slower compiling but runs faster.
 # puts the executable in target/release instead of target/debug
 
+cargo update
+# When you do want to update a crate (dependency), Cargo provides the command update, which will ignore the Cargo.lock file and figure out all the latest versions 
+# that fit your specifications in Cargo.toml
+# Cargo will then write those versions to the Cargo.lock file.
+# rand = "0.8.5" implies at least 0.8.5 but below 0.9
+
 # Using Cargo to run any existing projects:
 # git clone example.org/someproject
 # cd someproject
