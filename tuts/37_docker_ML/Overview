@@ -1,0 +1,3 @@
+https://datasciencedojo.com/blog/docker-for-data-science/
+
+Simply run a Python script with ML dependencies in Docker. Just runs it once-off and generates a result. Doesn't make it available for inference or anything.
