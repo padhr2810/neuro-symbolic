@@ -2,3 +2,4 @@
 https://towardsdatascience.com/build-and-run-a-docker-container-for-your-machine-learning-model-60209c2d7a7f
 
 Run ML inference using Docker.
+The test data that is used for inference is specified in the Dockerfile. So it's in the Docker container from the outset. It's NOT uploaded to an already running Docker container.
