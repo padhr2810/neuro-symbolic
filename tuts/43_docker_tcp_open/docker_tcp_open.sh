@@ -31,7 +31,8 @@ ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}
 docker -H tcp://192.168.1.18:2375 run hello-world
 docker -H tcp://192.168.1.18:2375 ps
 
-export DOCKER_HOST=tcp://<your host's ip>:2375
+#export DOCKER_HOST=tcp://<your host's ip>:2375
+export DOCKER_HOST=tcp://192.168.1.18:2375
 docker <subcommand>
                           #   Or you can export the DOCKER_HOST environment variable 
                           # (this won’t work if you have to use sudo to run Docker
