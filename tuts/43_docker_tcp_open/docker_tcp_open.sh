@@ -26,7 +26,10 @@ ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}
         # get your IP address
         # Use grep to filter IP address from ifconfig:
 
-docker -H tcp://<your host's ip>:2375 <subcommand>    # connect to Docker from outside
+#docker -H tcp://<your host's ip>:2375 <subcommand>    # connect to Docker from outside
+# e.g.:
+docker -H tcp://192.168.1.18:2375 run hello-world
+docker -H tcp://192.168.1.18:2375 ps
 
 export DOCKER_HOST=tcp://<your host's ip>:2375
 docker <subcommand>
