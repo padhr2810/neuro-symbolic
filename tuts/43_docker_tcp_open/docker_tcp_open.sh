@@ -12,7 +12,10 @@ ps -ef | grep -E 'docker(d| -d| daemon)\b' | grep -v grep
                            # you know the daemon is stopped when this command does NOT show any output
 
 ### THIS IS WHERE IT STOPS WORKING - COZ "DOCKER DAEMON" IS NOT RECOGNISED AS A COMMAND...........
-sudo docker daemon -H tcp://0.0.0.0:2375
+        # docker daemon = deprecated. replaced by 'dockerd' ... there is no deprecation warning.
+#sudo docker daemon -H tcp://0.0.0.0:2375
+sudo dockerd -H tcp://0.0.0.0:2375
+
                           #  restart it manually and open it up to outside users with the following command
                           #  This command starts as a daemon (docker daemon), defines the host server with the
                           #         -H flag, uses the TCP protocol, opens up all IP interfaces (with 0.0.0.0), and opens
