@@ -4,9 +4,14 @@
 
 sudo service docker stop   #  Before you open up the Docker daemon, you must first shut the running one down.
 
+# sudo service docker restart
+                           # this restarts the docker daemon - e.g. if change config file, this will be updated.
+
+
 ps -ef | grep -E 'docker(d| -d| daemon)\b' | grep -v grep 
                            # you know the daemon is stopped when this command does NOT show any output
 
+### THIS IS WHERE IT STOPS WORKING - COZ "DOCKER DAEMON" IS NOT RECOGNISED AS A COMMAND...........
 sudo docker daemon -H tcp://0.0.0.0:2375
                           #  restart it manually and open it up to outside users with the following command
                           #  This command starts as a daemon (docker daemon), defines the host server with the
