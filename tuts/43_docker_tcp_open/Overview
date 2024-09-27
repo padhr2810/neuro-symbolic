@@ -13,6 +13,11 @@ sudo docker daemon -H tcp://0.0.0.0:2375
                           #         -H flag, uses the TCP protocol, opens up all IP interfaces (with 0.0.0.0), and opens
                           #         up the standard Docker server port (2375)
 
+
+ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'
+        # get your IP address
+        # Use grep to filter IP address from ifconfig:
+
 docker -H tcp://<your host's ip>:2375 <subcommand>    # connect to Docker from outside
 
 export DOCKER_HOST=tcp://<your host's ip>:2375
