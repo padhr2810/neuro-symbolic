@@ -10,5 +10,24 @@ ps -ef | grep -E 'docker(d| -d| daemon)\b' | grep -v grep
 sudo docker daemon -H tcp://0.0.0.0:2375
                           #  restart it manually and open it up to outside users with the following command
                           #  This command starts as a daemon (docker daemon), defines the host server with the
-                                 -H flag, uses the TCP protocol, opens up all IP interfaces (with 0.0.0.0), and opens
-                                 up the standard Docker server port (2375)
+                          #         -H flag, uses the TCP protocol, opens up all IP interfaces (with 0.0.0.0), and opens
+                          #         up the standard Docker server port (2375)
+
+docker -H tcp://<your host's ip>:2375 <subcommand>    # connect to Docker from outside
+
+export DOCKER_HOST=tcp://<your host's ip>:2375
+docker <subcommand>
+                          #   Or you can export the DOCKER_HOST environment variable 
+                          # (this won’t work if you have to use sudo to run Docker
+
+# Note that you’ll also need to do one of these from inside your local machine as well,
+# because Docker is no longer listening in the default location.
+# If you want to make this change permanent on your host, you’ll need to configure your startup system.
+# WARNING If you use this technique to make your Docker daemon listen on a port, be aware that specifying the IP as 0.0.0.0 gives access to users on all
+#        network interfaces (both public and private), which is generally considered insecure.
+#  This is a great technique if you have a powerful machine dedicated to Docker inside a secure private local network, because everyone on the network can easily point
+#      Docker tools to the right place—DOCKER_HOST is a well-known environment variable that will inform most programs that access Docker where to look.
+
+docker run -p 2375:2375 -v /var/run/docker.sock:/var/run/docker.sock sequenceid/socat
+        # As an alternative to the somewhat cumbersome process of stopping the Docker service and running it manually, you could combine mounting the Docker socket as a
+        # volume (from technique 45) with using the socat tool to forward traffic from an external port
