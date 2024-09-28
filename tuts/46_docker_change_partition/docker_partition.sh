@@ -6,6 +6,32 @@ sudo service docker stop
 # THIS IS WHERE IT BREAKS:
 dockerd -g /home/dockeruser/mydocker
 
+# https://stackoverflow.com/questions/59345566/move-docker-volume-to-different-partition
+
+: '
+service docker stop
+
+    Create/Edit the /etc/docker/daemon.json configuration file with location of the new data directory:
+
+{
+    "data-root": "/new/path"
+}
+
+    Copy docker files to new location:
+
+rsync -aP /var/lib/docker/ /new/path
+
+    Remove old directory (rename it to be safe)
+
+mv /var/lib/docker /var/lib/docker.old
+
+    Create symlink:
+
+ln -s /new/path /var/lib/docker
+'
+
+
+
 : '
 This part of the Docker Daemon is configurable. Best practices would have you change the data folder; 
 this can be done with OS-level Linux commands like a symlink... 
