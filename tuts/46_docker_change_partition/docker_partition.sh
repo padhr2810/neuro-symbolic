@@ -10,6 +10,10 @@ dockerd -g /home/dockeruser/mydocker
 
 # Directory name:
 #      /etc/docker
+#          cd /etc/docker
+#  /etc  =  It is a central location where important system configuration files and directories are stored. 
+#           The name "/etc" stands for "et cetera," indicating that it contains miscellaneous system files that do not fit 
+#           into other specific directories
 
 : '
 service docker stop
