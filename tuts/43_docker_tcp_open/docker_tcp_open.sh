@@ -45,6 +45,8 @@ docker <subcommand>
 #  This is a great technique if you have a powerful machine dedicated to Docker inside a secure private local network, because everyone on the network can easily point
 #      Docker tools to the right place—DOCKER_HOST is a well-known environment variable that will inform most programs that access Docker where to look.
 
+
+THIS BIT DOESNOT WORK .... YET
 docker run -p 2375:2375 -v /var/run/docker.sock:/var/run/docker.sock sequenceid/socat
         # As an alternative to the somewhat cumbersome process of stopping the Docker service and running it manually, you could combine mounting the Docker socket as a
         # volume (from technique 45) with using the socat tool to forward traffic from an external port
