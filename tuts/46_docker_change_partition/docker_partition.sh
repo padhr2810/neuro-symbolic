@@ -6,6 +6,9 @@ sudo service docker stop
 # THIS IS WHERE IT BREAKS:
 dockerd -g /home/dockeruser/mydocker
 
+# THIS MIGHT WORK: [CREATE FILE IF IT DOESN'T EXIST]
+sudo nano /etc/docker/daemon.json
+
 # https://stackoverflow.com/questions/59345566/move-docker-volume-to-different-partition
 
 # Directory name:
@@ -14,6 +17,12 @@ dockerd -g /home/dockeruser/mydocker
 #  /etc  =  It is a central location where important system configuration files and directories are stored. 
 #           The name "/etc" stands for "et cetera," indicating that it contains miscellaneous system files that do not fit 
 #           into other specific directories
+
+:'
+Most of the files in /etc are owned by the root (administrative) user or are associated with the root or wheel administrative groups. 
+You modify those file by becoming the “super user” (root) typically by 'su' or 'sudo'
+'
+
 
 : '
 service docker stop
