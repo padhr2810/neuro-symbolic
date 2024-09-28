@@ -3,7 +3,19 @@
 # first stop the docker daemon.
 sudo service docker stop
 
+# THIS IS WHERE IT BREAKS:
 dockerd -g /home/dockeruser/mydocker
+
+: '
+Ubuntu 16.04 uses systemd, and the /etc/default/docker file is only used for systems running upstart and sysvinit 
+(see the comment in that file: https://github.com/docker/docker/blob/v1.12.0/contrib/init/sysvinit-debian/docker.default#L3-L8)
+You can configure the daemon by using a daemon.json configuration file, which works independent of the process manager 
+in use, and also allows you to live-reload certain settings.
+See https://docs.docker.com/engine/reference/commandline/dockerd/#/daemon-configuration-file for details
+Alternatively, if you want to configure through systemd, you can create a drop-in (override file), 
+as is explained in https://docs.docker.com/engine/admin/systemd/#/custom-docker-daemon-options
+'
+
 
 # A new set of folders and files will be created in this directory. These folders are internal to Docker, so play with them at your peril (as we’ve discovered!
 
