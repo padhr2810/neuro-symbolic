@@ -8,6 +8,9 @@ dockerd -g /home/dockeruser/mydocker
 
 # https://stackoverflow.com/questions/59345566/move-docker-volume-to-different-partition
 
+# Directory name:
+#      /etc/docker
+
 : '
 service docker stop
 
