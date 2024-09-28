@@ -1,3 +1,4 @@
+# Technique 1 from the book - Docker In Practice 2nd ed.
 
 #sudo snap remove docker    # remove the snap installed version coz just want the apt installed version
                            # this allowed me to stop the docker daemon service completely.
