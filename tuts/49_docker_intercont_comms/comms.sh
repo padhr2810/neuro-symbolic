@@ -9,6 +9,7 @@
 
 docker run -d -p 10001:80 --name blog1 wordpress
 docker run -d -p 10002:80 --name blog2 wordpress
+#       can access these via localhost:10001 and localhost:10002
 
 docker ps | grep blog
 
