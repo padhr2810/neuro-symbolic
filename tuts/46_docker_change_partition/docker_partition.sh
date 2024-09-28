@@ -7,6 +7,23 @@ sudo service docker stop
 dockerd -g /home/dockeruser/mydocker
 
 : '
+This part of the Docker Daemon is configurable. Best practices would have you change the data folder; 
+this can be done with OS-level Linux commands like a symlink... 
+I would say it's better to actually configure the Docker Daemon to store the data elsewhere!
+You can do that by editing the Docker command line (e.g. the systemd script that starts the Docker daemon), 
+or change /etc/docker/daemon.json.
+
+The file should have this content:
+{
+  "data-root": "/path/to/your/docker"
+}
+If you add a new hard drive, partition, or mount point you can add it here and docker will store its data there.
+
+'
+
+
+
+: '
 Ubuntu 16.04 uses systemd, and the /etc/default/docker file is only used for systems running upstart and sysvinit 
 (see the comment in that file: https://github.com/docker/docker/blob/v1.12.0/contrib/init/sysvinit-debian/docker.default#L3-L8)
 You can configure the daemon by using a daemon.json configuration file, which works independent of the process manager 
