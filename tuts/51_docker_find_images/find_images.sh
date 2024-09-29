@@ -21,4 +21,4 @@ device (a terminal) for you, and the -i flag specifies that this Docker session 
 '
 
 docker run -t -i node /bin/bash
-
+process.version
