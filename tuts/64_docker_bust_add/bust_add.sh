@@ -1,2 +1,2 @@
 # Docker In Practice 2nd ed.
-# Intelligent cache busting with ADD
+# Technique 24: Intelligent cache busting with ADD
