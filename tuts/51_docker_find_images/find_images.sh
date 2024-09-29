@@ -14,3 +14,11 @@ command on the name
 '
 
 docker pull node
+
+:'
+The -t flag creates a TTY
+device (a terminal) for you, and the -i flag specifies that this Docker session is interactive
+'
+
+docker run -t -i node /bin/bash
+
