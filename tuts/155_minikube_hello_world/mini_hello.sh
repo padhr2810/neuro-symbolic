@@ -38,8 +38,17 @@ kubectl get pods
 kubectl logs hello-node-55fdcd95bf-kj8wr
         #  View application logs for a container in a pod
         # the name of the pod (starting with 'hello-node ...' is retrieved by 'kubectl get pods' )
-        
+
+# !!! Create a service !!!
+:' 
+By default, the Pod is only accessible by its internal IP address within the Kubernetes cluster. 
+To make the hello-node Container accessible from outside the Kubernetes virtual network, you have to expose the Pod as a Kubernetes Service.
+Do not do this on a production cluster.
+' 
+
 kubectl expose deployment hello-node --type=LoadBalancer --port=8080
+        # Expose the Pod to the public internet using the kubectl expose command:
+        
 kubectl get services
 minikube service hello-node
 minikube addons list
