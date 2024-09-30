@@ -23,11 +23,22 @@ kubectl create deployment hello-node --image=registry.k8s.io/e2e-test-images/agn
         # create a Deployment that manages a Pod. The Pod runs a Container based on the provided Docker image.
 
 kubectl get deployments
+        # view deployments
 kubectl get pods
+        # view pods
 kubectl get events
+        # view events on the cluster.
+
 kubectl config view
+        # view the configuration of kubectl 
+        
 kubectl get pods
+        # running this again to get the name of the pod.
+        
 kubectl logs hello-node-55fdcd95bf-kj8wr
+        #  View application logs for a container in a pod
+        # the name of the pod (starting with 'hello-node ...' is retrieved by 'kubectl get pods' )
+        
 kubectl expose deployment hello-node --type=LoadBalancer --port=8080
 kubectl get services
 minikube service hello-node
