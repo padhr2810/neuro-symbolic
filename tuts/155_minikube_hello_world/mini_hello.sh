@@ -59,14 +59,25 @@ minikube service hello-node
 
 minikube addons list
         # List supported add-ons.
+        # This shows if enabled / disabled.
         
 minikube addons enable metrics-server
+        # enable one add-on
+
 kubectl get pod,svc -n kube-system
+        # View the Pod and Service you created by installing that addon
+        
 kubectl top pods
-kubectl get pod,svc -n kube-system
-kubectl top pods
+        # Check the output from metrics-server
+        # If see an error message, wait, and try again
+        
 minikube addons disable metrics-server
+        # disable the addon
+        
 kubectl delete service hello-node
 kubectl delete deployment hello-node
 minikube stop
+        # stop the cluster
+        
 minikube delete
+        # Optionally, delete the Minikube VM
