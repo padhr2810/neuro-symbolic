@@ -48,10 +48,18 @@ Do not do this on a production cluster.
 
 kubectl expose deployment hello-node --type=LoadBalancer --port=8080
         # Expose the Pod to the public internet using the kubectl expose command:
-        
+        # The --type=LoadBalancer flag indicates that you want to expose your Service outside of the cluster.
+        # The application code inside the test image only listens on TCP port 8080. 
+        # If you used kubectl expose to expose a different port, clients could not connect to that other port.
+        # On cloud providers that support load balancers, an external IP address would be provisioned to access the Service. 
+        # On minikube, the LoadBalancer type makes the Service accessible through the minikube service command.
+
 kubectl get services
 minikube service hello-node
+
 minikube addons list
+        # List supported add-ons.
+        
 minikube addons enable metrics-server
 kubectl get pod,svc -n kube-system
 kubectl top pods
