@@ -30,6 +30,7 @@ kubectl get events
         # view events on the cluster.
 kubectl get namespaces
         # view namespaces
+        # 'get namespaces' works after 'minikube start' ... doesn't require a deployment.
 
 kubectl config view
         # view the configuration of kubectl 
