@@ -28,6 +28,8 @@ kubectl get pods
         # view pods
 kubectl get events
         # view events on the cluster.
+kubectl get namespaces
+        # view namespaces
 
 kubectl config view
         # view the configuration of kubectl 
