@@ -3,6 +3,25 @@
 
 # https://stackoverflow.com/questions/66347900/setting-up-container-registry-for-kubeflow
 
+# for Docker Hub:
+echo -n padhraigryan:MYDOCKERPASSWORD  | base64
+        # i.e. this returns the input in base64 which is needed for kubeflow config.
+        #     -n     do not output the trailing newline
+
+# for Local Registry on laptop:
+echo -n p:MYLOCALPASSWORD  | base64
+
+# THIS MIGHT BE THE PLACE TO PUT CONFIG.JSON.
+/etc/docker/config.json
+
+# set up a registry server on local network.
+docker run -d -p 5000:5000 -v $HOME/registry:/var/lib/registry registry:2
+# registry:2 is the name of the image - it gets pulled from docker hub the first time.
+docker ps
+export CONTAINER_REGISTRY=$HOME/registry
+
+
+
 :'
 we'll assume that you've set your container registry via an environment variable
 $CONTAINER_REGISTRY, in your shell ...
