@@ -1,4 +1,7 @@
 
+# is this the container builder that needs to be configured?
+/home/p/Documents/code/pipelines/sdk/python/kfp/containers/_container_builder.py
+
 # https://github.com/GoogleContainerTools/kaniko/tree/main?tab=readme-ov-file
 
 # https://stackoverflow.com/questions/66347900/setting-up-container-registry-for-kubeflow
