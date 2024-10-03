@@ -3,6 +3,9 @@
 
 
 kubectl create deployment kubernetes-bootcamp --image=gcr.io/google-samples/kubernetes-bootcamp:v1
+    # name = kubernetes-bootcamp
+    # --image = ... [need full repository url for images hosted outside Docker Hub]
+    
 kubectl get deployments
 kubectl proxy
 
