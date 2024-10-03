@@ -1,6 +1,13 @@
 
 # is this the container builder that needs to be configured?
-/home/p/Documents/code/pipelines/sdk/python/kfp/containers/_container_builder.py
+#       /home/p/Documents/code/pipelines/sdk/python/kfp/containers/_container_builder.py
+
+:'
+1.    Install Docker on the Linux system.
+2.    Download the Kaniko binary from the official GitHub page.
+3.    Move the binary to a directory in the system's PATH.
+4.    Ensure that the binary has executable permissions.
+'
 
 # https://github.com/GoogleContainerTools/kaniko/tree/main?tab=readme-ov-file
 
