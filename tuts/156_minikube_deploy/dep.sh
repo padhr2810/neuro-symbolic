@@ -19,6 +19,17 @@ kubectl proxy
 
 # !!! THEN IN A DIFFERENT TERMINAL !!!
 curl http://localhost:8001/version
+        # SHOWS THE VERSION OF KUBERNETES YOU ARE RUNNING E.G. V1.30 
+        #         {
+        #          "major": "1",
+        #          "minor": "30", ........ }
+
+
 export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 echo Name of the Pod: $POD_NAME
+        # The API server will automatically create an endpoint for each pod, based on the pod name, that is also accessible through the proxy.
+        # First we need to get the Pod name, and we'll store it in the environment variable POD_NAME:
+
 curl http://localhost:8001/api/v1/namespaces/default/pods/$POD_NAME:8080/proxy/
+        # You can access the Pod through the proxied API like so ...
+        
