@@ -14,6 +14,14 @@ echo -n p:MYLOCALPASSWORD  | base64
 # THIS MIGHT BE THE PLACE TO PUT CONFIG.JSON.
 /etc/docker/config.json
 
+{
+  "auths": {
+      /home/p/registry: {
+      "auth": "BASE64_AUTH_HERE_FROM_ABOVE"
+    }
+  }
+}
+
 # set up a registry server on local network.
 docker run -d -p 5000:5000 -v $HOME/registry:/var/lib/registry registry:2
 # registry:2 is the name of the image - it gets pulled from docker hub the first time.
