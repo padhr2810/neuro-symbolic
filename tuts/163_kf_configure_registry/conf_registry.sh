@@ -3,17 +3,18 @@
 
 # https://stackoverflow.com/questions/66347900/setting-up-container-registry-for-kubeflow
 
+# !!!!!! GETTING THE USER CREDENTIALS !!!!!!
 # for Docker Hub:
 echo -n padhraigryan:MYDOCKERPASSWORD  | base64
         # i.e. this returns the input in base64 which is needed for kubeflow config.
         #     -n     do not output the trailing newline
-
 # for Local Registry on laptop:
 echo -n p:MYLOCALPASSWORD  | base64
 
 # THIS MIGHT BE THE PLACE TO PUT CONFIG.JSON.
 /etc/docker/config.json
 
+# PUT THIS INTO config.json
 {
   "auths": {
       /home/p/registry: {
@@ -39,7 +40,6 @@ by following the Kaniko configuration guide -> https://oreil.ly/88Ep-
 
 1. You set the environment variable using export CONTAINER_REGISTRY=docker.io/your_username in your terminal (or in your ~/.bash_profile and run source ~/.bash_profile).
 2. Your .docker/config.json does not have your password in plain text but in base64, for example the output of echo -n 'username:password' | base64
-3. The docker build and the docker push are two separate commands, in your example they're seen as one command, unlike the book.
 
 THE QUERY ON STACK OVERFLOW (SAME ISSUE THAT I HAD):
 "I've gone into Kaniko config guide and did everything as told -> creating config.json with "auth":"mypassword for dockerhub". After that In the book it says:
@@ -51,8 +51,9 @@ FROM gcr.io/kubeflow-images-public/tensorflow-2.1.0-notebook-cpu:1.0.0
 Example 2.8 Build new container and push to registry for use
 
 IMAGE="${CONTAINER_REGISTRY}/kubeflow/test:v1" 
-docker build  -t "${IMAGE}" -f Dockerfile . docker push "${IMAGE}"
-
+docker build  -t "${IMAGE}" -f Dockerfile . 
+docker push "${IMAGE}"
+    # BUILD AND PUSH NEED TO BE 2 SEPARATE COMMANDS... DON'T CONDENSE INTO ONE LINE.
 I've created Dockerfile with code from Example2.7 inside it, then ran code from Example 2.8 however not working.
 '
 
