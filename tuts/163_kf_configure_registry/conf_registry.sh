@@ -1,4 +1,7 @@
+APPROACH 1: FROM KUBEFLOW WEBSITE:
+https://www.kubeflow.org/docs/components/pipelines/legacy-v1/installation/localcluster-deployment/
 
+APPROACH 2: FOR THE TREVOR GRANT KUBEFLOW BOOK:
 # is this the container builder that needs to be configured?
 #       /home/p/Documents/code/pipelines/sdk/python/kfp/containers/_container_builder.py
 
