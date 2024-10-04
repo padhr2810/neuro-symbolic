@@ -20,7 +20,10 @@ kubectl get deployments
 kubectl get pods
 
 kubectl describe pods
-
+         # view what containers are inside that Pod and what images are used to build those containers
+         #  details about the Pod’s container: IP address, the ports used and a list of events 
+         # describe can be used for: node, pods, deployments etc.
+         
 echo -e "Starting Proxy. After starting it will not output a response. Please return to your original terminal window\n"; kubectl proxy
 
 export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
