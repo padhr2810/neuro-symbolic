@@ -1,7 +1,13 @@
+# Status: all runs ok EXCEPT FOR 2ND LAST LINE ---- curl $(minikube ip):$NODE_PORT
+
+
+# More information about the different types of Services can be found in the Using Source IP tutorial. Also see Connecting Applications with Services.
+#         lINK: https://kubernetes.io/docs/tutorials/services/source-ip/
+#         LiNK: https://kubernetes.io/docs/tutorials/services/connect-applications-service/
+
 #https://kubernetes.io/docs/tutorials/kubernetes-basics/expose/expose-intro/
 #https://minikube.sigs.k8s.io/docs/tutorials/kubernetes_101/module4/
 
-# Status: all runs ok EXCEPT FOR 2ND LAST LINE ---- curl $(minikube ip):$NODE_PORT
 
 # DEBUGGING --- https://stackoverflow.com/questions/75607181/minikube-curl-6-could-not-resolve-host-service-name
 
