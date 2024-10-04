@@ -15,7 +15,7 @@ kubectl get nodes
         # This command shows all nodes that can be used to host our applications. 
         # Now we have only one node, and we can see that its status is ready (it is ready to accept applications for deployment).
 
-# !!! run this command in a different terminal and leave it running !!!
+# !!!!!!!!!! run this command in a DIFFERENT TERMINAL and leave it running !!!!!!!!!!
 minikube dashboard
         # You can create Kubernetes resources on the dashboard such as Deployment and Service
         # By default, the dashboard is only accessible from within the internal Kubernetes virtual network. 
