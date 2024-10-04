@@ -1,4 +1,8 @@
+
 # https://kubernetes.io/docs/tutorials/hello-minikube/
+
+minikube version
+kubectl version 
 
 minikube start
         # creates a minikube cluster
