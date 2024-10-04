@@ -1,7 +1,8 @@
 
-### STATUS: RUNS SUCCESSFULLY :D
+### STATUS: RUNS SUCCESSFULLY :)
 
 # https://kubernetes.io/docs/tutorials/hello-minikube/
+# https://minikube.sigs.k8s.io/docs/tutorials/kubernetes_101/module1/
 
 minikube version
 kubectl version 
