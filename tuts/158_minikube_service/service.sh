@@ -1,4 +1,5 @@
-# Status: all runs ok EXCEPT FOR 2ND LAST LINE ---- curl $(minikube ip):$NODE_PORT
+# Status: all runs ok 
+#         2ND LAST LINE IS SUPPOSED TO FAIL, COZ DELETED THE SERVICE ALREADY ---- curl $(minikube ip):$NODE_PORT
 
 
 # More information about the different types of Services can be found in the Using Source IP tutorial. Also see Connecting Applications with Services.
