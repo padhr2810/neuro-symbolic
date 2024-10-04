@@ -89,6 +89,6 @@ kubectl delete deployment hello-node
 minikube stop
         # stop the cluster
         
-#minikube delete
+# minikube delete
         # Deletes a local Kubernetes cluster. This command deletes the VM, and removes all associated files.
         # If you want to use minikube again, you don't need to delete it.
