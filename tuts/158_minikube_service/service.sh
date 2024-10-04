@@ -53,16 +53,21 @@ curl $(minikube ip):$NODE_PORT
 
 #    !!!!!!!!!!!!!!!!!!!!!!!  Step 2: Using labels  !!!!!!!!!!!!!!!!!!!!!!!
 
+        # The Deployment created automatically a label for our Pod. With the describe deployment subcommand you can see the name (the key) of that label:
 kubectl describe deployment
 
+        # Let’s use this label to query our list of Pods. We’ll use the kubectl get pods command with -l as a parameter, followed by the label values:
 kubectl get pods -l app=kubernetes-bootcamp
 
+        # You can do the same to list the existing Services:
 kubectl get services -l app=kubernetes-bootcamp
 
 export POD_NAME=""
 export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 echo Name of the Pod: $POD_NAME
 
+        # To apply a new label we use the label subcommand followed by the object type, object name and the new label
+        # This will apply a new label to our Pod (we pinned the application version to the Pod), and we can check it with the describe pod command:
 kubectl label pods $POD_NAME version=v1
 
 kubectl describe pods $POD_NAME
@@ -71,8 +76,10 @@ kubectl get pods -l version=v1
 
 #    !!!!!!!!!!!!!!!!!!!!!!!  Step 3: Deleting a service  !!!!!!!!!!!!!!!!!!!!!!!
 
+        # Labels can also be used to delete a service.
 kubectl delete service -l app=kubernetes-bootcamp
 
+        # Confirm that the Service is gone:
 kubectl get services
 
         # To confirm that route is not exposed anymore you can curl the previously exposed IP and port ... this FAILS, proving that the application is not reachable anymore from outside of the cluster.
