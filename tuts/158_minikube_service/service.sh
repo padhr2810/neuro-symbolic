@@ -23,6 +23,7 @@ kubectl expose deployment/kubernetes-bootcamp --type="NodePort" --port 8080
 kubectl get services
 kubectl describe services/kubernetes-bootcamp
 
+export NODE_PORT=""
 export NODE_PORT=$(kubectl get services/kubernetes-bootcamp -o go-template='{{(index .spec.ports 0).nodePort}}')
 echo NODE_PORT=$NODE_PORT
 
@@ -34,6 +35,7 @@ kubectl get pods -l app=kubernetes-bootcamp
 
 kubectl get services -l app=kubernetes-bootcamp
 
+export POD_NAME=""
 export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 echo Name of the Pod: $POD_NAME
 
