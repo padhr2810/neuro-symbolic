@@ -1,6 +1,8 @@
 # https://kubernetes.io/docs/tutorials/kubernetes-basics/scale/scale-intro/
 # https://minikube.sigs.k8s.io/docs/tutorials/kubernetes_101/module5/
 
+kubectl delete service kubernetes-bootcamp
+
 kubectl expose deployment/kubernetes-bootcamp --type="LoadBalancer" --port 8080
 
 kubectl get deployments
