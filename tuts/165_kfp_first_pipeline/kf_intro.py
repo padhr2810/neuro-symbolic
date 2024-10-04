@@ -4,6 +4,24 @@
 ### Kubeflow Pipelines.
 ### create your first pipeline.
 
+"""
+NEED 2 TERMINALS.
+
+IN 1ST TERMINAL:
+    Deploy the Kubeflow Pipelines:
+	export PIPELINE_VERSION=2.3.0
+	kubectl apply -k "github.com/kubeflow/pipelines/manifests/kustomize/cluster-scoped-resources?ref=$PIPELINE_VERSION"
+	kubectl wait --for condition=established --timeout=60s crd/applications.app.k8s.io
+	kubectl apply -k "github.com/kubeflow/pipelines/manifests/kustomize/env/dev?ref=$PIPELINE_VERSION"
+    Run the following to port-forward the Kubeflow Pipelines UI:
+        kubectl port-forward -n kubeflow svc/ml-pipeline-ui 8080:80 
+        
+THEN IN THE 2ND TERMINAL:
+	run this module
+THEN IN UI:
+	open the URL (with localhost) THAT APPEARS IN THE OUTPUT OF TERMINAL 2.
+"""
+
 from kfp import dsl
 print(f"\n Imported dsl \n")
 
@@ -38,7 +56,9 @@ The following submits the pipeline for execution with the argument recipient='Wo
 # Kubeflow Pipelines - open-source backend instance.
 # https://www.kubeflow.org/docs/components/pipelines/operator-guides/installation/
 
-client = Client(host='<MY-KFP-ENDPOINT>')
+MY_KFP_ENDPOINT = "http://localhost:8080"	# NOTE: DOESN'T WORK WITH 127.0.0.1 ...... NEEDS TO BE "Localhost"
+client = Client(host=MY_KFP_ENDPOINT)
+
 print(f"\n Initialised the client... \n")
 
 run = client.create_run_from_pipeline_package(
