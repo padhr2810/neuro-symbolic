@@ -1,4 +1,6 @@
 
+### STATUS: RUNS SUCCESSFULLY :D
+
 # https://kubernetes.io/docs/tutorials/hello-minikube/
 
 minikube version
