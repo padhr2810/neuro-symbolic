@@ -1,4 +1,6 @@
-
+# Status: this all works.
+# added this to make sure only one pod name
+        #     export POD_NAME=""
 
 # https://minikube.sigs.k8s.io/docs/tutorials/kubernetes_101/module3/
 
@@ -28,7 +30,8 @@ kubectl describe pods
          # Run the command below in a NEW TERMINAL WINDOW to run the proxy
 echo -e "Starting Proxy. After starting it will not output a response. Please return to your original terminal window\n"; kubectl proxy
         # pods = we need to proxy access to them so we can debug and interact with them
-        
+
+export POD_NAME=""
 export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 echo Name of the Pod: $POD_NAME
 
