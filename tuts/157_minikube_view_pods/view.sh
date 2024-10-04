@@ -2,9 +2,17 @@
 
 # https://minikube.sigs.k8s.io/docs/tutorials/kubernetes_101/module3/
 
+minikube start 
+
 kubectl version
 
 kubectl get nodes
+
+# !!! Delete an existing deployment !!!
+kubectl get deploy -A
+# kubectl delete deploy deploymentname -n namespacename
+kubectl delete deploy kubernetes-bootcamp-v2   -n default
+
 
 kubectl create deployment kubernetes-bootcamp --image=gcr.io/k8s-minikube/kubernetes-bootcamp:v1
 
