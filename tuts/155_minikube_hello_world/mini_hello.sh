@@ -79,7 +79,7 @@ kubectl get pod,svc -n kube-system
         
 kubectl top pods
         # Check the output from metrics-server
-        # If see an error message, wait, and try again
+        # If see an error message, WAIT, AND TRY AGAIN .....
         
 minikube addons disable metrics-server
         # disable the addon
