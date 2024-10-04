@@ -32,17 +32,27 @@ export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{
 echo Name of the Pod: $POD_NAME
 
         # To see the output of our application, run a curl request.
+        # The URL is the route to the API of the Pod.
 curl http://localhost:8001/api/v1/namespaces/default/pods/$POD_NAME
 
+        # *Note: We don’t need to specify the container name, because we only have one container inside the pod.
 kubectl logs $POD_NAME
 
+        # We can execute commands directly on the container once the Pod is up and running. 
+        # let's list the environment variables
 kubectl exec $POD_NAME -- env
 
+        # start a bash session in the Pod’s container:
 kubectl exec -ti $POD_NAME -- bash
 
+        # We have now an open console on the container where we run our NodeJS application. The source code of the app is in the server.js file:
 cat server.js
 
+        # check that the application is up
+        # Note: here we used localhost because we executed the command inside the NodeJS Pod. 
+        # If you cannot connect to localhost:8080, check to make sure you have run the kubectl exec command and are launching the command from within the Pod
 curl localhost:8080
 
+        # To close your container connection
 exit
 
