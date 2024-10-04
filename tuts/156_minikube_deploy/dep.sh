@@ -1,4 +1,8 @@
 
+# this works fine - but needed to add :
+#         export POD_NAME=""
+# because for some reason it was appending multiple pod names and this raised errors subsequently.
+
 # https://kubernetes.io/docs/tutorials/kubernetes-basics/deploy-app/deploy-intro/
 
 
@@ -24,7 +28,7 @@ curl http://localhost:8001/version
         #          "major": "1",
         #          "minor": "30", ........ }
 
-
+export POD_NAME=""
 export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 echo Name of the Pod: $POD_NAME
         # The API server will automatically create an endpoint for each pod, based on the pod name, that is also accessible through the proxy.
