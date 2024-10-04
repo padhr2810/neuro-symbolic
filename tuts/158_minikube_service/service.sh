@@ -1,6 +1,8 @@
 #https://kubernetes.io/docs/tutorials/kubernetes-basics/expose/expose-intro/
 #https://minikube.sigs.k8s.io/docs/tutorials/kubernetes_101/module4/
 
+# Status: all runs ok EXCEPT FOR 2ND LAST LINE ---- curl $(minikube ip):$NODE_PORT
+
 # DEBUGGING --- https://stackoverflow.com/questions/75607181/minikube-curl-6-could-not-resolve-host-service-name
 
 minikube start 
