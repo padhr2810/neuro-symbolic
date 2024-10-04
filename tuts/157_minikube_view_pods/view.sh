@@ -24,6 +24,7 @@ kubectl describe pods
          #  details about the Pod’s container: IP address, the ports used and a list of events 
          # describe can be used for: node, pods, deployments etc.
 
+         # !!!!!!!!!!!!!!!!!!!!!!   *************  NEW TERMINAL  *************   !!!!!!!!!!!!!!!!!!!!!!
          # Run the command below in a NEW TERMINAL WINDOW to run the proxy
 echo -e "Starting Proxy. After starting it will not output a response. Please return to your original terminal window\n"; kubectl proxy
         # pods = we need to proxy access to them so we can debug and interact with them
