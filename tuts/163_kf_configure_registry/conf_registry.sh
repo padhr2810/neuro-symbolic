@@ -1,6 +1,7 @@
 # Comment on using KIND instad of minikube:
 # I'm not sure about the compatibility and steps needed for minikube. I recommend using kind instead.
 # Please see: https://www.kubeflow.org/docs/components/pipelines/legacy-v1/installation/localcluster-deployment/#kind
+# kind create cluster 
 
 APPROACH 1: FROM KUBEFLOW WEBSITE:
 https://www.kubeflow.org/docs/components/pipelines/legacy-v1/installation/localcluster-deployment/
