@@ -1,3 +1,7 @@
 
 # https://www.kubeflow.org/docs/components/pipelines/getting-started/
 # https://www.kubeflow.org/docs/components/pipelines/user-guides/core-functions/connect-api/
+
+# Comment on using KIND instad of minikube:
+# I'm not sure about the compatibility and steps needed for minikube. I recommend using kind instead.
+# Please see: https://www.kubeflow.org/docs/components/pipelines/legacy-v1/installation/localcluster-deployment/#kind
