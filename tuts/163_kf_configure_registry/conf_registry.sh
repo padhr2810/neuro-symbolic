@@ -2,6 +2,7 @@
 # I'm not sure about the compatibility and steps needed for minikube. I recommend using kind instead.
 # Please see: https://www.kubeflow.org/docs/components/pipelines/legacy-v1/installation/localcluster-deployment/#kind
 # kind create cluster 
+# ON UBUNTU NEEDED TO UNINSTALL AND REINSTALL KIND TO GET THIS WORKING.
 
 APPROACH 1: FROM KUBEFLOW WEBSITE:
 https://www.kubeflow.org/docs/components/pipelines/legacy-v1/installation/localcluster-deployment/
