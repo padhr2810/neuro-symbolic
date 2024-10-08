@@ -8,6 +8,9 @@
 NEED 2 TERMINALS.
 
 IN 1ST TERMINAL:
+    Might need to run this first:
+    	minikube delete
+     	minikube start
     Deploy the Kubeflow Pipelines:
 	export PIPELINE_VERSION=2.3.0
 	kubectl apply -k "github.com/kubeflow/pipelines/manifests/kustomize/cluster-scoped-resources?ref=$PIPELINE_VERSION"
