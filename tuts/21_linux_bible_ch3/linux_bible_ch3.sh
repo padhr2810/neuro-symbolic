@@ -1,6 +1,7 @@
 
 # To switch virtual console (i.e. a shell prompt that simulates a physical terminal)
 # hold CTRL+ALT +F2
+#       or CTRL+ALT +F3 ... etc ...
 # After running commands such as id, pwd, ls, press CTRL+ALT+F1 to return to the virtual console that holds your desktop.
 
 #########  type = gives info re a command. e.g. is it shell built-in command / subroutine / alias / keyword. Also gives path to command if possible.
