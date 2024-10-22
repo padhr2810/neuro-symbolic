@@ -66,32 +66,36 @@ echo $USERNAME       #   p
 echo $SHELL          #   /bin/bash
 echo $HOME           #   /home/p
 
-# Add a permanent mypass alias that displays the contents of the /etc/passwd file
+
+# Add a permanent alias that displays the contents of the "/etc/passwd" file
 
 nano $HOME/.bashrc	          # can store your aliases in this file. This allows BASH to use your aliases.
-
-# the dot implies it is a hidden file in the directory. So it won't appear with a simple `ls` command. Need to do `ls -a`
-# at the bottom of this page type:
+                              # the dot implies it is a hidden file in the directory. So it won't appear with a simple `ls` command. Need to do `ls -a`
+                              # at the bottom of this page type:
 
 alias m="cat /etc/passwd"
 
 
 # back in shell type:
 
-source $HOME/.bashrc	# source = execute a script file in current shell environment.
-alias m		# ensure the alias was set properly
-m		# the /etc/passwd file displays on the screen.
+source $HOME/.bashrc	               # source = execute a script file in current shell environment.
+alias m		                           # ensure the alias was set properly
+m		                                 # the /etc/passwd file displays on the screen.
 
-# display the man page for the mount system call ... i.e. first find man pages that include the word mount.
-# 
-man -k mount | grep ^mount	# -k = regexp 
-# grep = search for matching patterns in a file. Stands for: "global regular expression print". Powerful tool for scraping log files / code etc.
+######   display the man page for the mount system call ... i.e. first find man pages that include the word mount.
 
-# display a list of all currently set aliases.
-alias
+man -k mount | grep ^mount	      # -k = regexp 
+                                  # grep = search for matching patterns in a file. Stands for: "global regular expression print". 
+                                  # Powerful tool for scraping log files / code etc.
+                                  #     -k, --apropos
+              #    Approximately equivalent to apropos.  Search the short
+              #    manual page descriptions for keywords and display any matches. 
+              #   Each manual page has a short description available within it.
+              #   apropos searches the descriptions for instances of keyword.
+              #       keyword is usually a regular expression, as if (-r) was used
 
-# To remove an alias:
-unalias [name] 	# e.g. `unalias m`
+alias                                      # display a list of all currently set aliases.
+unalias [name] 	           # e.g. `unalias m`         # remove an alias
 
-# How to run a shell script from bash:
-bash myscript.sh 
+bash myscript.sh                           #  run a shell script from bash
+
