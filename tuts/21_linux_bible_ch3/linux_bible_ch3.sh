@@ -83,6 +83,7 @@ alias m		                           # ensure the alias was set properly
 m		                                 # the /etc/passwd file displays on the screen.
 
 ######   display the man page for the mount system call ... i.e. first find man pages that include the word mount.
+######      grep ^mount	... i.e. must start with "mount" - hence discard if mount appears anywhere else in the phrase..
 
 man -k mount | grep ^mount	      # -k = regexp 
                                   # grep = search for matching patterns in a file. Stands for: "global regular expression print". 
@@ -97,5 +98,7 @@ man -k mount | grep ^mount	      # -k = regexp
 alias                                      # display a list of all currently set aliases.
 unalias [name] 	           # e.g. `unalias m`         # remove an alias
 
-bash myscript.sh                           #  run a shell script from bash
+######   run a shell script from bash
+
+bash myscript.sh                           
 
