@@ -17,11 +17,15 @@ type mount
 
 type cd
 
+###### locate = very fast way to fild a file based on filename (ie searches a database)
+###### note: if cant find the file using locate, then run `sudo updatedb`
+###### man pages are usually found in: /usr/share/man/ 
+###### find the man page for tracepath - this finds all paths containing 'tracepath' - need to eyeball to find the 'man' page
+######       e.g. for 'tracepath' it's in: /usr/share/man/man8/tracepath.8.gz
 
-# find the man page for tracepath
+
 locate tracepath
-# note: if cant find the file using locate, then run `sudo updatedb`
-# locate = very fast way to fild a file based on filename (ie searches a database)
+sudo updatedb
 
 # get to end of a line in shell
 # CTRL+E
