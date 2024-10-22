@@ -27,12 +27,18 @@ type cd
 locate tracepath
 sudo updatedb
 
-# get to end of a line in shell
-# CTRL+E
+###### get to end of a line in shell
+###### CTRL+E
+###### get to start of a line in shell
+# CTRL+X
 
-#  whats the different between `man ls` and `ls --help`
+######  whats the different between `man ls` and `ls --help`
 # For one, --help is not a command, it is an argument that is often given to a command to get help using it.
-#  Meanwhile, man is a command, short for `manual`. Manual pages are installed by many programs, and are a common way to find help about commands
+#  Meanwhile, man is a command, short for `manual`. MANUAL pages are installed by many programs, and are a common way to find help about commands
+
+man ls 
+
+ls --help 
 
 # list the contents of your home dir (and order it by time)
 ls $HOME
@@ -42,22 +48,36 @@ ls -t $HOME
 date
 date +%D
 
-# Pipe /etc/services to the `less` command
-cat /etc/services | less
-# cat = reads file. cat is short for concatenate - will concat multiple data streams into one.
+man date
+date --help
 
-# view variables to find current hostname, username, shell, and home directories
-echo $HOSTNAME
-echo $USERNAME
-echo $SHELL
-echo $HOME
+######   cat = reads file. cat is short for CONCATENATE - will concat multiple data streams into one.
+######   Pipe the file called: /etc/services to the `less` command
+
+cat /etc/services | less
+
+
+# Creating files in Linux is a simple task that can be accomplished using various commands such as touch, echo, cat, nano and vi or vim
+
+######  view variables to find current hostname, username, shell, and home directories
+
+echo $HOSTNAME       #   p-HP-Pavilion-x360-Convertible-14-ba0xx
+echo $USERNAME       #   p 
+echo $SHELL          #   /bin/bash
+echo $HOME           #   /home/p
 
 # Add a permanent mypass alias that displays the contents of the /etc/passwd file
-nano $HOME/.bashrc	# can store your aliases in this file. This allows BASH to use your aliases.
+
+nano $HOME/.bashrc	          # can store your aliases in this file. This allows BASH to use your aliases.
+
 # the dot implies it is a hidden file in the directory. So it won't appear with a simple `ls` command. Need to do `ls -a`
 # at the bottom of this page type:
+
 alias m="cat /etc/passwd"
+
+
 # back in shell type:
+
 source $HOME/.bashrc	# source = execute a script file in current shell environment.
 alias m		# ensure the alias was set properly
 m		# the /etc/passwd file displays on the screen.
