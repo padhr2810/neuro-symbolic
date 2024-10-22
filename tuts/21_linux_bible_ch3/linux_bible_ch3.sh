@@ -3,11 +3,18 @@
 # hold CTRL+ALT +F2
 # After running commands such as id, pwd, ls, press CTRL+ALT+F1 to return to the virtual console that holds your desktop.
 
-# Find the mount command (dont want tons of results from locate mount)
+#########  type = gives info re a command. e.g. is it shell built-in command / subroutine / alias / keyword. Also gives path to command if possible.
+#########      more parsimonious output than using 'locate'
+#########      for 'mount' it gives the same result as: 'which mount'
+######### Find the mount command (dont want tons of results from locate mount)
+
 type mount
-# check what is the `cd` command
-type cd		# output: `cd is a shell builtin`
-# type = gives info re a command. Tells is it shell built-in command / subroutine / alias / keyword. Also gives path to command if possible.
+
+#########  'type cd' doesn't give any path coz not an executable.
+#########  'which cd' also doesn't give any path obviously.
+#########  'type cd' --- output: `cd is a shell builtin`
+
+type cd
 
 
 # find the man page for tracepath
