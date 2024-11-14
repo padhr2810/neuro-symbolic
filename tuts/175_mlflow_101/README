@@ -2,3 +2,34 @@
 https://mlflow.org/docs/latest/getting-started/tracking-server-overview/index.html#method-1-start-your-own-mlflow-server
 
 Method 1: Start Your Own MLflow Server on your Local Machine (not suitable for cloud)
+
+The installation of MLflow (i.e. "pip install mlflow") includes the MLflow CLI tool, so you can start a local MLflow server with UI by running the command below in your terminal:
+
+$ mlflow ui
+
+This works inside the venv that has mlflow installed. But doesn't work if you're in a different python environment.
+
+The open source version of the MLflow UI is a bit different from the MLflow UI on Databricks. .
+
+    Connect MLflow session to the local MLflow server IP by mlflow.set_tracking_uri()
+
+    mlflow.set_tracking_uri("http://localhost:5000")
+
+    Next, let’s try logging some dummy metrics. We can view these test metrics on the local hosted UI:
+
+import mlflow
+
+mlflow.set_tracking_uri("http://localhost:5000")
+mlflow.set_experiment("check-localhost-connection")
+
+with mlflow.start_run():
+    mlflow.log_metric("foo", 1)
+    mlflow.log_metric("bar", 2)
+
+In the UI, inside the left sidebar you should now see the experiment with name
+“check-localhost-connection”. Click on this.
+
+Clicking on the run (“clumsy-steed-426” in this example, yours will be different) will bring you to the run view, similar as below.
+
+You can even customize your UI by forking the MLflow repo and modify the UI code.
+Cons of local setup: Team collaboration is harder than using a hosted tracking server.
